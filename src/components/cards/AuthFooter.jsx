@@ -23,34 +23,13 @@ export default function AuthFooter() {
         </Typography>
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 3 }} textAlign={{ xs: 'center', sm: 'inherit' }}>
-          <Typography
-            variant="subtitle2"
-            color="secondary"
-            component={Link}
-            href="https://codedthemes.com"
-            target="_blank"
-            underline="hover"
-          >
+          <Typography variant="subtitle2" color="secondary" component={Link} href="" target="_blank" underline="hover">
             Terms and Conditions
           </Typography>
-          <Typography
-            variant="subtitle2"
-            color="secondary"
-            component={Link}
-            href="https://codedthemes.com"
-            target="_blank"
-            underline="hover"
-          >
+          <Typography variant="subtitle2" color="secondary" component={Link} href="" target="_blank" underline="hover">
             Privacy Policy
           </Typography>
-          <Typography
-            variant="subtitle2"
-            color="secondary"
-            component={Link}
-            href="https://codedthemes.com"
-            target="_blank"
-            underline="hover"
-          >
+          <Typography variant="subtitle2" color="secondary" component={Link} href="" target="_blank" underline="hover">
             CA Privacy Notice
           </Typography>
         </Stack>

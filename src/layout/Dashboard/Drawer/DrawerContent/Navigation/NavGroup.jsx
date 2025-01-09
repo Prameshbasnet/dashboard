@@ -17,7 +17,7 @@ export default function NavGroup({ item }) {
       case 'collapse':
         return (
           <Typography key={menuItem.id} variant="caption" color="error" sx={{ p: 2.5 }}>
-            collapse - only available in paid version
+            {/* collapse - only available in paid version */}
           </Typography>
         );
       case 'item':
@@ -25,7 +25,7 @@ export default function NavGroup({ item }) {
       default:
         return (
           <Typography key={menuItem.id} variant="h6" color="error" align="center">
-            Fix - Group Collapse or Items
+            {/* Fix - Group Collapse or Items */}
           </Typography>
         );
     }
