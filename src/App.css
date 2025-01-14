@@ -1,0 +1,86 @@
+.cheque-count-row {
+  margin: -12px;
+}
+
+.cheque-count-col {
+  padding: 12px;
+}
+
+.cheque-count-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.cheque-count-card:hover {
+  transform: scale(1.05);
+}
+
+.cheque-card-body {
+  display: flex;
+}
+
+.cheque-count-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  max-width: 100%;
+  color: #fff;
+  font-family: sans-serif;
+  margin-bottom: 12px;
+}
+
+.cheque-count-value {
+  font-size: 36px;
+  color: #fff;
+}
+
+.cheque-desc {
+  margin-left: 1rem;
+}
+
+
+.cheque-count-row {
+  overflow-x: auto; /* Allows horizontal scrolling if items overflow */
+  white-space: nowrap; /* Prevents wrapping in case items are inline */
+}
+
+.cheque-count-col {
+  flex: 1; /* Makes sure each column takes equal space */
+}
+/* Define CSS variables for primary and secondary colors */
+:root {
+  --primary-color: #1d4386; /* Adjust color as needed */
+  --secondary-text-color: #6d6d6d; /* Adjust color as needed */
+}
+
+body {
+  font-family: 'Vollkorn', serif; /* Set default font */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #333; /* Default text color */
+}
+
+/* Optional reset styles */
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* Links styling */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+/* Global utility classes */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
