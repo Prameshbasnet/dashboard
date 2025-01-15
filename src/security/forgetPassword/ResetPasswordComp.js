@@ -31,7 +31,6 @@ const ResetPasswordComp = () => {
                   ---- EFCU Admin Panel ---
                 </div>
               </div>
-              <div className="producttext">{/* <h1 className="productdesigntext">Prabhu</h1> */}</div>
               <div className="productimage w-80">
                 <img src={EfcuImage} alt="productimage" />
               </div>

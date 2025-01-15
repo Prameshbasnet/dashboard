@@ -12,6 +12,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import ForgetPassword from 'security/forgetPassword/ForgetPassword';
 import logo from '../../../src/assets/images/logo/logo.png';
 import { deleteIndexedDB } from 'utils/deleteIndexDB';
+import Typography from '@mui/material/Typography';
+import { Link } from 'react-router-dom';
 
 const AuthLogin = () => {
   const dispatch = useDispatch();
@@ -131,7 +133,10 @@ const AuthLogin = () => {
               <>
                 <div className="flex justify-between items-center">
                   <div className="logintitle">Login!</div>
-                  <div className="text-blue-600">Don&#39;t have an account?</div>
+                  {/* <div className="text-blue-600">Don&#39;t have an account?</div> */}
+                  <Typography component={Link} to="/register" variant="body1" sx={{ textDecoration: 'none' }} color="primary">
+                    Don&apos;t have an account?
+                  </Typography>
                 </div>
 
                 <div className="formcomponent">

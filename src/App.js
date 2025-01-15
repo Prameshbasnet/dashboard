@@ -11,6 +11,7 @@ import ChangePasswordComp from 'security/forgetPassword/ResetPasswordComp';
 import ResetPasswordComp from 'security/forgetPassword/ResetPasswordComp';
 import ChangeTemporaryPasswordComp from 'security/changePassword/ChangeTemporaryPasswordComp';
 import SuperAdminRoute from 'utils/checkIsSuperAdmin';
+import AuthRegister from 'security/signUp/SignUp';
 
 const DashboardDefault = Loadable(lazy(() => import('dashboard')));
 const AuthLogin = Loadable(lazy(() => import('security/login/login')));
@@ -32,6 +33,7 @@ const AppRoutes = () => {
       <Route path="/reset-password" element={<ChangePasswordComp />} />
       <Route path="/reset-password/:token" element={<ResetPasswordComp />} />
       <Route path="/change-temporary-password" element={<ChangeTemporaryPasswordComp />} />
+      <Route path="/register" element={<AuthRegister />} />
     </Routes>
   );
 };
