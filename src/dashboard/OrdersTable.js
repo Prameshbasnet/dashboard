@@ -1,31 +1,30 @@
-import PropTypes from "prop-types";
-import { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
-import { Box, Link,  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,  } from "@mui/material";
+import { Box, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 // third-party
-import { NumericFormat } from "react-number-format";
+import { NumericFormat } from 'react-number-format';
 
 // project import
-
 
 function LoanDetail(Applicant, Address, Duration, protein) {
   return { Applicant, Address, Duration, protein };
 }
 
 const rows = [
-  LoanDetail("Raju Singh", "Kathmandu ", 40, 40570),
-  LoanDetail("Shredhar Bhandari", "456 Maple St, Brooklyn", 120, 50000),
-  LoanDetail("Amit Verma", "789 Oak Ave, Denver", 90, 15000),
-  LoanDetail("Vikram Chauhan", "321 Pine Rd, Houston", 60, 70000),
-  LoanDetail("Pooja Sharma", "654 Cedar St, Seattle", 30, 25000),
-  LoanDetail("Rajesh Kumar", "987 Birch Ln, Boston", 180, 98000),
-  LoanDetail("Neha Patel", "432 Spruce Blvd, Miami", 365, 123500),
-  LoanDetail("Karan Singh", "159 Redwood Dr, Austin", 45, 38000),
-  LoanDetail("Anita Yadav", "753 Cherry St, Chicago", 75, 62000),
-  LoanDetail("Ravi Mehta", "951 Oakmont Ave, Dallas", 150, 89000)
+  LoanDetail('Raju Singh', 'Kathmandu ', 40, 40570),
+  LoanDetail('Shredhar Bhandari', '456 Maple St, Brooklyn', 120, 50000),
+  LoanDetail('Amit Verma', '789 Oak Ave, Denver', 90, 15000),
+  LoanDetail('Vikram Chauhan', '321 Pine Rd, Houston', 60, 70000),
+  LoanDetail('Pooja Sharma', '654 Cedar St, Seattle', 30, 25000),
+  LoanDetail('Rajesh Kumar', '987 Birch Ln, Boston', 180, 98000),
+  LoanDetail('Neha Patel', '432 Spruce Blvd, Miami', 365, 123500),
+  LoanDetail('Karan Singh', '159 Redwood Dr, Austin', 45, 38000),
+  LoanDetail('Anita Yadav', '753 Cherry St, Chicago', 75, 62000),
+  LoanDetail('Ravi Mehta', '951 Oakmont Ave, Dallas', 150, 89000)
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -39,7 +38,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === "desc" ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 function stableSort(array, comparator) {
@@ -58,28 +57,28 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "Applicant",
-    align: "left",
+    id: 'Applicant',
+    align: 'left',
     disablePadding: false,
-    label: "Applicant"
+    label: 'Applicant'
   },
   {
-    id: "Address",
-    align: "left",
+    id: 'Address',
+    align: 'left',
     disablePadding: true,
-    label: "Address"
+    label: 'Address'
   },
   {
-    id: "Duration",
-    align: "right",
+    id: 'Duration',
+    align: 'right',
     disablePadding: false,
-    label: "Duration"
+    label: 'Duration'
   },
   {
-    id: "protein",
-    align: "right",
+    id: 'protein',
+    align: 'right',
     disablePadding: false,
-    label: "Total Amount"
+    label: 'Total Amount'
   }
 ];
 
@@ -93,7 +92,7 @@ function OrderTableHead({ order, orderBy }) {
           <TableCell
             key={headCell.id}
             align={headCell.align}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             {headCell.label}
@@ -148,8 +147,8 @@ OrderTableHead.propTypes = {
 // ==============================|| ORDER TABLE ||============================== //
 
 export default function OrderTable() {
-  const [order] = useState("asc");
-  const [orderBy] = useState("Applicant");
+  const [order] = useState('asc');
+  const [orderBy] = useState('Applicant');
   const [selected] = useState([]);
 
   const isSelected = (Applicant) => selected.indexOf(Applicant) !== -1;
@@ -158,21 +157,21 @@ export default function OrderTable() {
     <Box>
       <TableContainer
         sx={{
-          width: "100%",
-          overflowX: "auto",
-          position: "relative",
-          display: "block",
-          maxWidth: "100%",
-          "& td, & th": { whiteSpace: "nowrap" }
+          width: '100%',
+          overflowX: 'auto',
+          position: 'relative',
+          display: 'block',
+          maxWidth: '100%',
+          '& td, & th': { whiteSpace: 'nowrap' }
         }}
       >
         <Table
           aria-labelledby="tableTitle"
           sx={{
-            "& .MuiTableCell-root:first-of-type": {
+            '& .MuiTableCell-root:first-of-type': {
               pl: 2
             },
-            "& .MuiTableCell-root:last-of-type": {
+            '& .MuiTableCell-root:last-of-type': {
               pr: 3
             }
           }}
@@ -187,7 +186,7 @@ export default function OrderTable() {
                 <TableRow
                   hover
                   role="checkbox"
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   aria-checked={isItemSelected}
                   tabIndex={-1}
                   key={row.Applicant}

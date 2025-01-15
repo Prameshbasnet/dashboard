@@ -11,18 +11,17 @@ import {
 
   // Stack,
   Typography
-} from "@mui/material";
+} from '@mui/material';
 
-import OrdersTable from "./OrdersTable";
+import OrdersTable from './OrdersTable';
 // import IncomeAreaChart from "./IncomeAreaChart";
 
-import MainCard from "components/MainCard";
+import MainCard from 'components/MainCard';
 
 // assets
 
-import AnalyticEcommerce from "components/cards/statistics/AnalyticEcommerce";
-import Pichart from "./PieChart";
-import PieChartApplication from "./PieChartApplication";
+import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
+import PieChartApplication from './PieChartApplication';
 
 // avatar style
 // const avatarSX = {
@@ -66,7 +65,7 @@ const DashboardDefault = () => {
       rowSpacing={4.5}
       columnSpacing={1.75}
       style={{
-        padding: "1rem"
+        padding: '1rem'
       }}
     >
       {/* row 1 */}
@@ -75,29 +74,25 @@ const DashboardDefault = () => {
       </Grid>
 
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Account Application" count="1" percentage={1} extra="1" />
+        <AnalyticEcommerce title="Total Sales" count="1" percentage={1} extra="1" />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Incomplete Account Application" count="1" percentage={1} extra="1" />
+        <AnalyticEcommerce title="Total Income" count="1" percentage={1} extra="1" />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Loan Application" count="1" percentage={1} isLoss color="warning" extra="1" />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Incomplete Loan Application" count="1" percentage={1} isLoss color="warning" extra="1" />
+        <AnalyticEcommerce title="Total Expenses" count="1" percentage={1} isLoss color="warning" extra="1" />
       </Grid>
 
-      <Grid item md={8} sx={{ display: { sm: "none", md: "block", lg: "none" } }} />
+      <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
-      <Grid  item xs={12} md={5} lg={5} sx={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
-        <Pichart />
-        <PieChartApplication  />
+      <Grid item xs={12} md={5} lg={5} sx={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
+        <PieChartApplication />
       </Grid>
       {/* row 3 */}
       <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
-            <Typography variant="h5">Recent Loan Application</Typography>
+            <Typography variant="h5">Application</Typography>
           </Grid>
           <Grid item />
         </Grid>

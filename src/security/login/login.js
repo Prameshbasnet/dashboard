@@ -129,7 +129,11 @@ const AuthLogin = () => {
               <ForgetPassword handleShowPassword={handleShowForgetPassword} />
             ) : (
               <>
-                <div className="logintitle">Login!</div>
+                <div className="flex justify-between items-center">
+                  <div className="logintitle">Login!</div>
+                  <div className="text-blue-600">Don&#39;t have an account?</div>
+                </div>
+
                 <div className="formcomponent">
                   <form noValidate autoComplete="off" onSubmit={handleSubmit}>
                     <div className="logincomponent">
@@ -182,6 +186,7 @@ const AuthLogin = () => {
                         */}
                       </FormControl>
                     </div>
+                    <div className="mt-6 rounded-[10px]">Hello</div>
                     <div className="mt-6 rounded-[10px]">
                       <Button fullWidth size="large" type="submit" variant="contained" color="primary">
                         Login

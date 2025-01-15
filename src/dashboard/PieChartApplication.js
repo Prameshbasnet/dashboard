@@ -1,28 +1,27 @@
-import MainCard from "components/MainCard";
-import React from "react";
-import ReactApexChart from "react-apexcharts";
-
+import MainCard from 'components/MainCard';
+import React from 'react';
+import ReactApexChart from 'react-apexcharts';
 
 const PieChartApplication = ({ data }) => {
-  const { Personal, Business } = data;
-  const series = [Personal, Business];
-  const labels = ["Personal", "Business"];
+  const { Bijay } = data;
+  const series = [Bijay];
+  const labels = ['Bijay'];
   const options = {
     chart: {
-      width: "100%",
-      type: "pie"
+      width: '100%',
+      type: 'pie'
     },
     labels: labels,
-    colors: ["#05a6f0", "#f35325"],
+    colors: ['#05a6f0', '#f35325'],
     responsive: [
       {
         breakpoint: 480,
         options: {
           chart: {
-            width: "100%"
+            width: '100%'
           },
           legend: {
-            position: "left"
+            position: 'left'
           }
         }
       }
@@ -34,14 +33,13 @@ const PieChartApplication = ({ data }) => {
 
 // Generating dummy data
 const dummyData = {
-  Personal: Math.floor(Math.random() * 100),
-  Business: Math.floor(Math.random() * 100)
+  Bijay: Math.floor(Math.random() * 100)
 };
 
 const App = () => (
   <div>
-    <h1> Application</h1>
-    <MainCard style={{ padding: "28px 8px 38px 90px", height: "350px", width: "600px", marginTop: "10px" }}>
+    <h1> Dummy</h1>
+    <MainCard style={{ padding: '28px 8px 38px 90px', height: '350px', width: '600px', marginTop: '10px' }}>
       <PieChartApplication data={dummyData} />
     </MainCard>
   </div>
