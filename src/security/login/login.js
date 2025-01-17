@@ -2,7 +2,17 @@ import React, { useEffect, useState } from 'react';
 import EfcuImage from '../../assets/images/Login/login.svg';
 import LoginCurve from '../../assets/images/Login/curve.png';
 import PoweredByLogo from '../../assets/images/Login/logo.png';
-import { InputLabel, OutlinedInput, FormControl, Button, IconButton, InputAdornment } from '@mui/material';
+import {
+  InputLabel,
+  OutlinedInput,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  Checkbox,
+  FormControlLabel,
+  Button,
+  FormHelperText
+} from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -13,11 +23,12 @@ import ForgetPassword from 'security/forgetPassword/ForgetPassword';
 import logo from '../../../src/assets/images/logo/logo.png';
 import { deleteIndexedDB } from 'utils/deleteIndexDB';
 import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
+import * as Yup from 'yup';
 
 const AuthLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isSubmitting] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordRequestForm, setShowPasswordRequestForm] = useState(false);
@@ -34,12 +45,18 @@ const AuthLogin = () => {
     password: Yup.string().required('Password is required')
   });
   */
+  const validationSchema = Yup.object().shape({
+    userName: Yup.string().required('Username is required'),
+    password: Yup.string().required('Password is required')
+  });
 
   const formik = useFormik({
     initialValues: {
       userName: '',
-      password: ''
+      password: '',
+      ipAddress: '1.1.1.1'
     },
+    validationSchema: validationSchema,
     // Commenting out validation schema reference
     // validationSchema: validationSchema,
     onSubmit: async () => {
@@ -92,7 +109,7 @@ const AuthLogin = () => {
     cleanupAuthState(); // Call the cleanup function on mount
   }, [dispatch]);
 
-  const { handleChange, handleSubmit, values } = formik;
+  const { errors, touched, handleChange, handleSubmit, values } = formik;
 
   const handleCloseToast = () => {
     setOpenToast(false);
@@ -107,7 +124,7 @@ const AuthLogin = () => {
       <div className="md:hidden clientimg">
         <img src={logo} alt="clientlogo" />
       </div>
-      <div className="loginshadow">
+      <div className=" loginshadow">
         <div className="logingrid">
           <div className="leftsection">
             <div className="clientimg">
@@ -116,10 +133,12 @@ const AuthLogin = () => {
             <div className="textalignment">
               <div className="loginflex">
                 <div className="topheadertext">Welcome Back</div>
-                <div className="text-[#595959] self-stretch text-[12px] font-[400] leading-[20.13px] text-center">----Admin Panel---</div>
               </div>
-              <div className="productimage w-80">
-                <img src={EfcuImage} alt="productimage" />
+              <div className="producttext">
+                <h1 className="productdesigntext">Dashboard</h1>
+              </div>
+              <div className="productimage">
+                <img src={EfcuImage} alt="EfcuImage" />
               </div>
             </div>
             <div className="logincurve">
@@ -131,19 +150,12 @@ const AuthLogin = () => {
               <ForgetPassword handleShowPassword={handleShowForgetPassword} />
             ) : (
               <>
-                <div className="flex justify-between items-center">
-                  <div className="logintitle">Login!</div>
-                  {/* <div className="text-blue-600">Don&#39;t have an account?</div> */}
-                  <Typography component={Link} to="/register" variant="body1" sx={{ textDecoration: 'none' }} color="primary">
-                    Don&apos;t have an account?
-                  </Typography>
-                </div>
-
+                <div className="logintitle">Login!</div>
                 <div className="formcomponent">
                   <form noValidate autoComplete="off" onSubmit={handleSubmit}>
                     <div className="logincomponent">
                       <InputLabel htmlFor="user-name">User Name</InputLabel>
-                      <FormControl fullWidth>
+                      <FormControl fullWidth={true}>
                         <OutlinedInput
                           id="user-name"
                           type="text"
@@ -151,17 +163,12 @@ const AuthLogin = () => {
                           name="userName"
                           onChange={handleChange}
                           placeholder="Enter username"
-                          // Commented error validation
-                          // error={touched.userName && Boolean(errors.userName)}
+                          error={touched.userName && Boolean(errors.userName)}
                         />
-                        {/*
-                        {touched.userName && errors.userName && (
-                          <FormHelperText error>{errors.userName}</FormHelperText>
-                        )}
-                        */}
+                        {touched.userName && errors.userName && <FormHelperText error>{errors.userName}</FormHelperText>}
                       </FormControl>
                       <InputLabel htmlFor="password-login">Password</InputLabel>
-                      <FormControl fullWidth>
+                      <FormControl fullWidth={true}>
                         <OutlinedInput
                           id="password-login"
                           type={showPassword ? 'text' : 'password'}
@@ -169,8 +176,7 @@ const AuthLogin = () => {
                           name="password"
                           onChange={handleChange}
                           placeholder="Enter password"
-                          // Commented error validation
-                          // error={touched.password && Boolean(errors.password)}
+                          error={touched.password && Boolean(errors.password)}
                           endAdornment={
                             <InputAdornment position="end">
                               <IconButton
@@ -184,16 +190,38 @@ const AuthLogin = () => {
                             </InputAdornment>
                           }
                         />
-                        {/*
-                        {touched.password && errors.password && (
-                          <FormHelperText error>{errors.password}</FormHelperText>
-                        )}
-                        */}
+                        {touched.password && errors.password && <FormHelperText error>{errors.password}</FormHelperText>}
+                      </FormControl>
+                      <FormControl>
+                        <input
+                          id="ipAddress"
+                          type="hidden"
+                          value={values.ipAddress || ''}
+                          name="ipAddress"
+                          onChange={handleChange}
+                          placeholder="Enter ip Address"
+                        />
                       </FormControl>
                     </div>
-                    <div className="mt-6 rounded-[10px]">Hello</div>
+                    <div className="logincontrolflex">
+                      <FormControlLabel
+                        control={<Checkbox name="checked" color="primary" size="small" />}
+                        label={<Typography variant="h6">Remember Me</Typography>}
+                      />
+                      <Button variant="h6" color="text.primary" className="cursor-pointer" onClick={() => setShowPasswordRequestForm(true)}>
+                        Forgot Password?
+                      </Button>
+                    </div>
                     <div className="mt-6 rounded-[10px]">
-                      <Button fullWidth size="large" type="submit" variant="contained" color="primary">
+                      <Button
+                        fullWidth
+                        size="large"
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className="loginbutton"
+                        disabled={isSubmitting}
+                      >
                         Login
                       </Button>
                     </div>
@@ -201,7 +229,6 @@ const AuthLogin = () => {
                 </div>
               </>
             )}
-
             <div className="poweredby">
               <span className="poweredtext">Powered by:</span>
               <div>
@@ -211,7 +238,7 @@ const AuthLogin = () => {
           </div>
         </div>
       </div>
-      <div className="login-footer-mobile login-footer">© Copyright {new Date().getFullYear()} Pramesh Basnet</div>
+      <div className="login-footer-mobile login-footer">© Copyright {new Date().getFullYear()} Pramesh</div>
       <Toast open={openToast} onClose={handleCloseToast} severity={toastSeverity} message={toastMessage} />
     </div>
   );
