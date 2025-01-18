@@ -1,13 +1,12 @@
-/*eslint-disable*/
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getAxiosInstance } from "../axios/AxiosInstance";
 import { setMessage } from "./message";
-import { getAxiosInstance } from "store/axios/AxiosInstance";
 
-const AxiosInstance = getAxiosInstance("identityUrl");
+const AxiosInstance = getAxiosInstance("apiUrl");
 
-export const requestRestPassword = createAsyncThunk("reqestResetPassword/fetch", async (values, thunkAPI) => {
+export const fetchKiosks = createAsyncThunk("kiosk/fetch", async (values, thunkAPI) => {
   try {
-    const response = await AxiosInstance.post(`/reset-password`, values);
+    const response = await AxiosInstance.get(`/kiosk`);
     return { ...response.data };
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -16,9 +15,9 @@ export const requestRestPassword = createAsyncThunk("reqestResetPassword/fetch",
   }
 });
 
-export const postResetPassword = createAsyncThunk("reset-password/post", async (values, thunkAPI) => {
+export const addKiosk = createAsyncThunk("kiosk/add", async (values, thunkAPI) => {
   try {
-    const response = await AxiosInstance.post(`/reset-password/reset`, values);
+    const response = await AxiosInstance.post(`/kiosk`, values);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -27,7 +26,7 @@ export const postResetPassword = createAsyncThunk("reset-password/post", async (
   }
 });
 
-export const editKiosk1 = createAsyncThunk("kiosk/edit", async (values, thunkAPI) => {
+export const editKiosk = createAsyncThunk("kiosk/edit", async (values, thunkAPI) => {
   try {
     const response = await AxiosInstance.put(`/kiosk/${values.id}`, values.data);
     return response.data;
@@ -38,7 +37,7 @@ export const editKiosk1 = createAsyncThunk("kiosk/edit", async (values, thunkAPI
   }
 });
 
-export const deleteKiosk1 = createAsyncThunk("kiosk/delete", async (id, thunkAPI) => {
+export const deleteKiosk = createAsyncThunk("kiosk/delete", async (id, thunkAPI) => {
   try {
     const response = await AxiosInstance.delete(`/kiosk/${id}`);
     return response.data;
@@ -49,16 +48,37 @@ export const deleteKiosk1 = createAsyncThunk("kiosk/delete", async (id, thunkAPI
   }
 });
 
-const requestRestPasswordSlice = createSlice({
-  name: "requestRestPasswordSlice",
+const kioskSlice = createSlice({
+  name: "kiosk",
   initialState: [],
   reducers: {},
   extraReducers(builder) {
-    
+    builder.addCase(fetchKiosks.fulfilled, (state, action) => {
+      return action.payload.data;
+    });
+
+    builder.addCase(addKiosk.fulfilled, (state, action) => {
+      state.push(action.payload.data);
+    });
+
+    builder.addCase(editKiosk.fulfilled, (state, action) => {
+      const index = state.findIndex((kiosk) => kiosk.id === action.payload.data.id);
+      if (index !== -1) {
+        state[index] = {
+          ...state[index],
+          ...action.payload.data
+        };
+      }
+    });
+
+    builder.addCase(deleteKiosk.fulfilled, (state, action) => {
+      const index = state.findIndex((kiosk) => kiosk.id === action.payload.data.id);
+      state.splice(index, 1);
+    });
   }
 });
 
 export const selectAllKiosk = (state) => state.kiosk;
 
-const { reducer } = requestRestPasswordSlice;
+const { reducer } = kioskSlice;
 export default reducer;

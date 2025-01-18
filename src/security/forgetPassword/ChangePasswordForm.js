@@ -1,56 +1,42 @@
 import React, { useState } from "react";
 import { InputLabel, OutlinedInput, FormControl, Button, FormHelperText } from "@mui/material";
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
+import * as Yup from "yup"; // Import Yup for validation
 import PropTypes from "prop-types";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom"; // Import useLocation
 import { useDispatch } from "react-redux";
-import { changeForgotPassword } from "../../store/slice/resetPassword"; // Import the correct thunk
+import { postResetPassword } from "store/slice/resetPassword";
 import Toast from "components/Toast";
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
-  email: Yup.string().email("Invalid email format").required("Email is required"),
-  confirmationCode: Yup.string().required("Confirmation code is required"),
-  newPassword: Yup.string().min(8, "Password must be at least 8 characters").required("New Password is required"),
+  password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required")
 });
 
-const ChangePasswordForm = () => {
+const ChangePasswordForm = ( ) => {
   const [openToast, setOpenToast] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastSeverity, setToastSeverity] = useState("success");
-
+  const dispatch = useDispatch()
+  const navigate = useNavigate(); // Initialize useNavigate for redirection
+  const { token } = useParams(); // Get the token from URL params
   const handleChangePassword = (values, { setSubmitting }) => {
     setSubmitting(true);
-
-    const payload = {
-      email: values.email,
-      confirmationCode: values.confirmationCode,
-      newPassword: values.newPassword,
-    };
-
-    dispatch(changeForgotPassword(payload))
-      .unwrap()
-      .then(() => {
-        setToastMessage("Password Reset Successful");
-        setToastSeverity("success");
-        setOpenToast(true);
-        setTimeout(() => navigate("/login"), 3000); // Redirect after a short delay
-      })
-      .catch((error) => {
-        setToastMessage(error || "Oops, an error occurred. Please try again later");
-        setToastSeverity("error");
-        setOpenToast(true);
-      })
-      .finally(() => {
-        setSubmitting(false);
-      });
+    dispatch(postResetPassword(values)).unwrap().then(() =>{
+      setToastMessage("Password Reset Successful")
+      setToastSeverity("success");
+      setOpenToast(true)
+      navigate("/login"); 
+    }).catch(()=>{
+      setToastMessage(" Opps error occured . Please Try Again later")
+      setToastSeverity("error");
+      setOpenToast(true)
+    })
+    setSubmitting(false);
   };
+      const [toastMessage, setToastMessage] = useState("");
+    const [toastSeverity, setToastSeverity] = useState("success");
 
   const handleCloseToast = () => {
     setOpenToast(false);
@@ -58,62 +44,19 @@ const ChangePasswordForm = () => {
 
   return (
     <div>
-      <div className="logintitle" style={{ fontSize: "24px" }}>Change Password</div>
+      <div className="logintitle" style={{fontSize:"24px"}}>Change Password</div>
       <div className="formcomponent">
         <Formik
-          initialValues={{ email: "", confirmationCode: "", newPassword: "", confirmPassword: "" }}
-          validationSchema={validationSchema}
+          initialValues={{ token:token ,password: "", confirmPassword: "" }}
+          validationSchema={validationSchema} 
           onSubmit={handleChangePassword}
         >
-          {({ errors, touched, isSubmitting, handleChange }) => (
+          {({ errors, touched, isSubmitting }) => (
             <Form>
-              <FormControl fullWidth={true} error={Boolean(errors.email && touched.email)}>
-                <InputLabel htmlFor="email">Email</InputLabel>
-                <Field
-                  as={OutlinedInput}
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  onChange={handleChange}
-                />
-                {errors.email && touched.email && <FormHelperText error>{errors.email}</FormHelperText>}
-              </FormControl>
-
-              <FormControl
-                fullWidth={true}
-                error={Boolean(errors.confirmationCode && touched.confirmationCode)}
-                style={{ marginTop: "20px" }}
-              >
-                <InputLabel htmlFor="confirmationCode">Confirmation Code</InputLabel>
-                <Field
-                  as={OutlinedInput}
-                  id="confirmationCode"
-                  name="confirmationCode"
-                  type="text"
-                  placeholder="Enter your confirmation code"
-                  onChange={handleChange}
-                />
-                {errors.confirmationCode && touched.confirmationCode && (
-                  <FormHelperText error>{errors.confirmationCode}</FormHelperText>
-                )}
-              </FormControl>
-
-              <FormControl
-                fullWidth={true}
-                error={Boolean(errors.newPassword && touched.newPassword)}
-                style={{ marginTop: "20px" }}
-              >
-                <InputLabel htmlFor="newPassword">New Password</InputLabel>
-                <Field
-                  as={OutlinedInput}
-                  id="newPassword"
-                  name="newPassword"
-                  type="password"
-                  placeholder="Enter your new password"
-                  onChange={handleChange}
-                />
-                {errors.newPassword && touched.newPassword && <FormHelperText error>{errors.newPassword}</FormHelperText>}
+              <FormControl fullWidth={true} error={Boolean(errors.password && touched.password)}>
+                <InputLabel htmlFor="password">New Password</InputLabel>
+                <Field as={OutlinedInput} id="password" name="password" type="password" placeholder="Enter your new password" />
+                {errors.password && touched.password && <FormHelperText error>{errors.password}</FormHelperText>}
               </FormControl>
 
               <FormControl
@@ -121,18 +64,15 @@ const ChangePasswordForm = () => {
                 error={Boolean(errors.confirmPassword && touched.confirmPassword)}
                 style={{ marginTop: "20px" }}
               >
-                <InputLabel htmlFor="confirmPassword">Confirm New Password</InputLabel>
+                <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
                 <Field
                   as={OutlinedInput}
                   id="confirmPassword"
                   name="confirmPassword"
                   type="password"
                   placeholder="Confirm your new password"
-                  onChange={handleChange}
                 />
-                {errors.confirmPassword && touched.confirmPassword && (
-                  <FormHelperText error>{errors.confirmPassword}</FormHelperText>
-                )}
+                {errors.confirmPassword && touched.confirmPassword && <FormHelperText error>{errors.confirmPassword}</FormHelperText>}
               </FormControl>
 
               <div className="mt-6 rounded-[10px]">
@@ -149,21 +89,21 @@ const ChangePasswordForm = () => {
                 </Button>
               </div>
               <div className="mt-4 text-center">
-                <Link to="/login">
-                  <Button>Login</Button>
+                <Link to ="/login">
+                  <Button >Login</Button>
                 </Link>
               </div>
             </Form>
           )}
         </Formik>
       </div>
-      <Toast open={openToast} onClose={handleCloseToast} severity={toastSeverity} message={toastMessage} />
+      <Toast open={openToast} onClose={handleCloseToast} severity={toastSeverity} message={toastMessage}/>
     </div>
   );
 };
 
 ChangePasswordForm.propTypes = {
-  handleShowPassword: PropTypes.func
+  handleShowPassword: PropTypes.func.isRequired
 };
 
 export default ChangePasswordForm;

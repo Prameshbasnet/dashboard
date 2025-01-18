@@ -1,32 +1,13 @@
-import { SettingOutlined, DashboardOutlined, DollarOutlined } from '@ant-design/icons';
-import {
-  DescriptionOutlined,
-  BusinessCenterOutlined,
-  GroupOutlined,
-  PersonOutlineOutlined,
-  CreditCardOutlined,
-  DirectionsCarOutlined,
-  FlashOnOutlined
-} from '@mui/icons-material';
-import { ApartmentOutlined, AppsOutlined, CategoryOutlined, LocalOfferOutlined } from '@mui/icons-material';
+import { SettingOutlined, DashboardOutlined } from '@ant-design/icons';
 
-export const getMenuItems = (moduleName) => {
-  const aliasForPromoAndSettings = moduleName == 'Admin' ? '' : moduleName;
+export const getMenuItems = () => {
   return [
     { key: '1', icon: <DashboardOutlined />, label: 'Dashboard', url: '/', alias: 'Dashboard' },
     {
-      key: '15',
-      icon: <DollarOutlined />, // Icon for PromoCode section
-      label: 'PromoCode',
-      children: [
-        {
-          key: '16',
-          icon: <LocalOfferOutlined />, // Icon for PromoCode child
-          label: 'PromoCode',
-          url: '/promocode',
-          alias: aliasForPromoAndSettings // Use conditional alias
-        }
-      ]
+      key: '2',
+      icon: <SettingOutlined />,
+      label: 'Settings',
+      children: [{ key: '11', label: 'User', url: '/user', alias: 'Master' }]
     }
   ];
 };

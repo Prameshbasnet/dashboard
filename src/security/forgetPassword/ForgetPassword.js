@@ -5,27 +5,20 @@ import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import Toast from "components/Toast"; // Import the Toast component
-import { requestRestPassword } from "store/slice/resetPassword"; // Import the reset password slice
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { requestRestPassword } from "store/slice/resetPassword";
 
 const validationSchema = Yup.object({
-  email: Yup.string().email("Invalid email address").required("Email is required")
+  Email: Yup.string().email("Invalid email address").required("Email is required")
 });
 
 const ForgetPassword = ({ handleShowPassword }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Initialize useNavigate for redirection
   const [openToast, setOpenToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastSeverity, setToastSeverity] = useState("error");
-  const [isRequestInProgress, setIsRequestInProgress] = useState(false); // Track if a request is in progress
 
   const handleResetPassword = (values, { setSubmitting }) => {
-    if (isRequestInProgress) return; // Prevent multiple submissions
-
-    setIsRequestInProgress(true);
     setSubmitting(true);
-
     dispatch(requestRestPassword(values))
       .unwrap()
       .then(() => {
@@ -33,43 +26,40 @@ const ForgetPassword = ({ handleShowPassword }) => {
         setToastMessage("Password reset request successful. Please check your email.");
         setOpenToast(true);
         setTimeout(() => {
-          navigate("/reset-password"); // Navigate to the reset password page
-        }, 3000);
+        handleShowPassword(false);
+        }, 5000);
+
       })
       .catch((error) => {
         setToastSeverity("error");
         setToastMessage(error || "Failed to reset password. Please try again.");
         setOpenToast(true);
+        console.log(error);
+        
       })
       .finally(() => {
-        setIsRequestInProgress(false);
         setSubmitting(false);
       });
   };
 
   return (
     <div>
-      <div className="logintitle" style={{ fontSize: "24px" }}>
-        Reset Password
-      </div>
+      <div className="logintitle" style={{ fontSize: "24px" }}>Reset Password</div>
       <div className="formcomponent">
-        <Formik initialValues={{ email: "" }} validationSchema={validationSchema} onSubmit={handleResetPassword}>
+        <Formik
+          initialValues={{ Email: "" }}
+          validationSchema={validationSchema}
+          onSubmit={handleResetPassword}
+        >
           {({ errors, touched, isSubmitting }) => (
             <Form>
-              <FormControl fullWidth={true} error={Boolean(errors.email && touched.email)}>
-                <InputLabel htmlFor="email">Email</InputLabel>
-                <Field as={OutlinedInput} id="email" name="email" type="email" placeholder="Enter your email" />
-                {errors.email && touched.email && <FormHelperText error>{errors.email}</FormHelperText>}
+              <FormControl fullWidth={true} error={Boolean(errors.Email && touched.Email)}>
+                <InputLabel htmlFor="Email">Email</InputLabel>
+                <Field as={OutlinedInput} id="Email" name="Email" type="email" placeholder="Enter your email" />
+                {errors.Email && touched.Email && <FormHelperText error>{errors.Email}</FormHelperText>}
               </FormControl>
               <div className="mt-6 rounded-[10px]">
-                <Button
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  disabled={isSubmitting || isRequestInProgress} // Disable button if already submitting
-                >
+                <Button fullWidth size="large" type="submit" variant="contained" color="primary" disabled={isSubmitting}>
                   Reset Password
                 </Button>
               </div>

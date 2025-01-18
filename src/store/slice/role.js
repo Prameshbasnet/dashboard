@@ -1,23 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getAxiosInstance } from "../axios/AxiosInstance";
 import { setMessage } from "./message";
+import { getAxiosInstance } from "store/axios/AxiosInstance";
 
-const AxiosInstance = getAxiosInstance("apiUrl");
+const AxiosInstance = getAxiosInstance("identityUrl");
 
-export const fetchBranch = createAsyncThunk("branch/fetch", async (values, thunkAPI) => {
+export const fetchRoles = createAsyncThunk("roles/fetch", async (__, thunkAPI) => {
   try {
-    const response = await AxiosInstance.get(`/branch`);
-    return { ...response.data };
-  } catch (error) {
-    const message = (error.response && error.response.data.data) || error.message || error.toString();
-    thunkAPI.dispatch(setMessage(message));
-    return thunkAPI.rejectWithValue(message);
-  }
-});
-
-export const addBranch = createAsyncThunk("branch/add", async (values, thunkAPI) => {
-  try {
-    const response = await AxiosInstance.post(`/branch`, values);
+    const response = await AxiosInstance.get(`/roles`);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -26,9 +15,9 @@ export const addBranch = createAsyncThunk("branch/add", async (values, thunkAPI)
   }
 });
 
-export const editBranch = createAsyncThunk("branch/edit", async (values, thunkAPI) => {
+export const addRole = createAsyncThunk("roles/add", async (userData, thunkAPI) => {
   try {
-    const response = await AxiosInstance.put(`/branch/${values.id}`, values.data);
+    const response = await AxiosInstance.post(`/roles`, userData);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -37,9 +26,9 @@ export const editBranch = createAsyncThunk("branch/edit", async (values, thunkAP
   }
 });
 
-export const deleteBranch = createAsyncThunk("branch/delete", async (id, thunkAPI) => {
+export const editRole = createAsyncThunk("roles/edit", async ({ id, data }, thunkAPI) => {
   try {
-    const response = await AxiosInstance.delete(`/branch/${id}`);
+    const response = await AxiosInstance.put(`/roles/${id}`, data);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -48,21 +37,32 @@ export const deleteBranch = createAsyncThunk("branch/delete", async (id, thunkAP
   }
 });
 
-const branchSlice = createSlice({
-  name: "branch",
+export const deleteRole = createAsyncThunk("roles/delete", async (id, thunkAPI) => {
+  try {
+    const response = await AxiosInstance.delete(`/roles/${id}`);
+    return response.data;
+  } catch (error) {
+    const message = (error.response && error.response.data.data) || error.message || error.toString();
+    thunkAPI.dispatch(setMessage(message));
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+const roleSlice = createSlice({
+  name: "role",
   initialState: [],
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(fetchBranch.fulfilled, (state, action) => {
+    builder.addCase(fetchRoles.fulfilled, (state, action) => {
       return action.payload.data;
     });
 
-    builder.addCase(addBranch.fulfilled, (state, action) => {
-      state.push(action.payload.data);
+    builder.addCase(addRole.fulfilled, (state, action) => {
+      state.push(action.payload);
     });
 
-    builder.addCase(editBranch.fulfilled, (state, action) => {
-      const index = state.findIndex((branch) => branch.id === action.payload.data.id);
+    builder.addCase(editRole.fulfilled, (state, action) => {
+      const index = state.findIndex((role) => role.id === action.payload.data.id);
       if (index !== -1) {
         state[index] = {
           ...state[index],
@@ -71,14 +71,14 @@ const branchSlice = createSlice({
       }
     });
 
-    builder.addCase(deleteBranch.fulfilled, (state, action) => {
-      const index = state.findIndex((branch) => branch.id === action.payload.data.id);
+    builder.addCase(deleteRole.fulfilled, (state, action) => {
+      const index = state.findIndex((role) => role.id === action.payload.data.id);
       state.splice(index, 1);
     });
   }
 });
 
-export const selectAllBranch = (state) => state.branch;
+export const selectAllRole = (state) => state.role;
 
-const { reducer } = branchSlice;
+const { reducer } = roleSlice;
 export default reducer;

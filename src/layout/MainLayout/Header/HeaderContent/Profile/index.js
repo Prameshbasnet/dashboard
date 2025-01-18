@@ -1,12 +1,8 @@
-/*eslint-disable*/
-"use client"; // This makes the component a client component
-
-import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import { useRef, useState } from "react";
+import PropTypes from 'prop-types';
+import { useRef, useState } from 'react';
 
 // material-ui
-import { useTheme } from "@mui/material/styles";
+import { useTheme } from '@mui/material/styles';
 import {
   Avatar,
   Box,
@@ -21,23 +17,21 @@ import {
   Tab,
   Tabs,
   Typography
-} from "@mui/material";
+} from '@mui/material';
 
 // project import
-import MainCard from "components/MainCard";
-import Transitions from "components/@extended/Transitions";
-import ProfileTab from "./ProfileTab";
-import SettingTab from "./SettingTab";
+import MainCard from 'components/MainCard';
+import Transitions from 'components/@extended/Transitions';
+import ProfileTab from './ProfileTab';
+import SettingTab from './SettingTab';
 
 // assets
-import { LogoutOutlined, SettingOutlined } from "@ant-design/icons";
+import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 // import { getAvatarInitials } from "utils/getAvatarInitials";
 
-import { useDispatch, useSelector } from "react-redux";
-import { signOut } from "store/slice/auth";
-import { getAvatarInitials } from "utils/getAvatarInitials";
-import { persistor } from "store/index";
-import { deleteIndexedDB } from "utils/deleteIndexDB";
+import { useDispatch, useSelector } from 'react-redux';
+import { signOut } from 'store/slice/auth';
+import { getAvatarInitials } from 'utils/getAvatarInitials';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -57,28 +51,23 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `profile-tab-${index}`,
-    "aria-controls": `profile-tabpanel-${index}`
+    'aria-controls': `profile-tabpanel-${index}`
   };
 }
 
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
 
 const Profile = () => {
-  const navigate = useNavigate()
   const theme = useTheme();
   const dispatch = useDispatch();
   const userName = useSelector((state) => state?.auth?.data?.userName);
-  if (!localStorage.getItem("userName")) {
-    localStorage.setItem("userName", userName);
+  if (!localStorage.getItem('userName')) {
+    localStorage.setItem('userName', userName);
   }
 
   const handleLogout = async () => {
     // logout
     dispatch(signOut());
-    persistor.purge(); // Clear persisted data
-    persistor.flush(); // optional: flush storage to make sure state is persisted immediately
-    await deleteIndexedDB("myIndexedDB"); // Name matches your IndexedDB storage
-    navigate("/login")
   };
 
   const anchorRef = useRef(null);
@@ -100,26 +89,26 @@ const Profile = () => {
     setValue(newValue);
   };
 
-  const iconBackColorOpen = "grey.300";
+  const iconBackColorOpen = 'grey.300';
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
       <ButtonBase
         sx={{
           p: 0.25,
-          bgcolor: open ? iconBackColorOpen : "transparent",
+          bgcolor: open ? iconBackColorOpen : 'transparent',
           borderRadius: 1,
-          "&:hover": { bgcolor: "secondary.lighter" }
+          '&:hover': { bgcolor: 'secondary.lighter' }
         }}
         aria-label="open profile"
         ref={anchorRef}
-        aria-controls={open ? "profile-grow" : undefined}
+        aria-controls={open ? 'profile-grow' : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <Avatar alt="profile user" sx={{ width: 34, height: 34 }}>
-            {getAvatarInitials(userName) || getAvatarInitials(localStorage.getItem("userName"))}
+            {getAvatarInitials(userName) || getAvatarInitials(localStorage.getItem('userName'))}
           </Avatar>
         </Stack>
       </ButtonBase>
@@ -133,7 +122,7 @@ const Profile = () => {
         popperOptions={{
           modifiers: [
             {
-              name: "offset",
+              name: 'offset',
               options: {
                 offset: [0, 9]
               }
@@ -150,7 +139,7 @@ const Profile = () => {
                   width: 290,
                   minWidth: 240,
                   maxWidth: 290,
-                  [theme.breakpoints.down("md")]: {
+                  [theme.breakpoints.down('md')]: {
                     maxWidth: 250
                   }
                 }}
@@ -162,10 +151,10 @@ const Profile = () => {
                         <Grid item>
                           <Stack direction="row" spacing={1.25} alignItems="center">
                             <Avatar alt="profile user" sx={{ width: 32, height: 32 }}>
-                              {getAvatarInitials(userName) || getAvatarInitials(localStorage.getItem("userName"))}
+                              {getAvatarInitials(userName) || getAvatarInitials(localStorage.getItem('userName'))}
                             </Avatar>
                             <Stack>
-                              <Typography variant="h6">{localStorage.getItem("userName")}</Typography>
+                              <Typography variant="h6">{localStorage.getItem('userName')}</Typography>
                               <Typography variant="body2" color="textSecondary"></Typography>
                             </Stack>
                           </Stack>
@@ -179,17 +168,17 @@ const Profile = () => {
                     </CardContent>
                     {open && (
                       <>
-                        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                           <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="profile tabs">
                             <Tab
                               sx={{
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                textTransform: "capitalize"
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'start',
+                                alignItems: 'left',
+                                textTransform: 'capitalize'
                               }}
-                              icon={<SettingOutlined style={{ marginBottom: 0, marginRight: "10px" }} />}
+                              icon={<SettingOutlined style={{ marginBottom: 0, marginRight: '10px' }} />}
                               label="Setting"
                               {...a11yProps(1)}
                             />

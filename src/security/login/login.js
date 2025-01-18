@@ -137,7 +137,7 @@ const AuthLogin = () => {
               <div className="producttext">
                 <h1 className="productdesigntext">Dashboard</h1>
               </div>
-              <div className="productimage">
+              <div className="productimage w-72">
                 <img src={EfcuImage} alt="EfcuImage" />
               </div>
             </div>

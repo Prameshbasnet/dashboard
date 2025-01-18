@@ -4,9 +4,9 @@ import { setMessage } from "./message";
 
 const AxiosInstance = getAxiosInstance("apiUrl");
 
-export const fetchBranch = createAsyncThunk("branch/fetch", async (values, thunkAPI) => {
+export const fetchSliderImagesByKioskId = createAsyncThunk("slider-images/fetch", async (id, thunkAPI) => {
   try {
-    const response = await AxiosInstance.get(`/branch`);
+    const response = await AxiosInstance.post(`/slider-image/kiosk-id?id=${id}`);
     return { ...response.data };
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -15,9 +15,9 @@ export const fetchBranch = createAsyncThunk("branch/fetch", async (values, thunk
   }
 });
 
-export const addBranch = createAsyncThunk("branch/add", async (values, thunkAPI) => {
+export const addSliderImages = createAsyncThunk("slider-images/add", async (values, thunkAPI) => {
   try {
-    const response = await AxiosInstance.post(`/branch`, values);
+    const response = await AxiosInstance.post(`/slider-image?kioskId=${values.id}`, values.data);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -26,9 +26,9 @@ export const addBranch = createAsyncThunk("branch/add", async (values, thunkAPI)
   }
 });
 
-export const editBranch = createAsyncThunk("branch/edit", async (values, thunkAPI) => {
+export const editSliderImages = createAsyncThunk("slider-images/edit", async (values, thunkAPI) => {
   try {
-    const response = await AxiosInstance.put(`/branch/${values.id}`, values.data);
+    const response = await AxiosInstance.put(`/slider-image/${values.id}`, values.data);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -37,9 +37,9 @@ export const editBranch = createAsyncThunk("branch/edit", async (values, thunkAP
   }
 });
 
-export const deleteBranch = createAsyncThunk("branch/delete", async (id, thunkAPI) => {
+export const deleteSliderImages = createAsyncThunk("slider-images/delete", async (id, thunkAPI) => {
   try {
-    const response = await AxiosInstance.delete(`/branch/${id}`);
+    const response = await AxiosInstance.delete(`/slider-image/${id}`);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -48,20 +48,20 @@ export const deleteBranch = createAsyncThunk("branch/delete", async (id, thunkAP
   }
 });
 
-const branchSlice = createSlice({
-  name: "branch",
+const sliderImageSlice = createSlice({
+  name: "slider-images",
   initialState: [],
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(fetchBranch.fulfilled, (state, action) => {
+    builder.addCase(fetchSliderImagesByKioskId.fulfilled, (state, action) => {
       return action.payload.data;
     });
 
-    builder.addCase(addBranch.fulfilled, (state, action) => {
+    builder.addCase(addSliderImages.fulfilled, (state, action) => {
       state.push(action.payload.data);
     });
 
-    builder.addCase(editBranch.fulfilled, (state, action) => {
+    builder.addCase(editSliderImages.fulfilled, (state, action) => {
       const index = state.findIndex((branch) => branch.id === action.payload.data.id);
       if (index !== -1) {
         state[index] = {
@@ -71,14 +71,14 @@ const branchSlice = createSlice({
       }
     });
 
-    builder.addCase(deleteBranch.fulfilled, (state, action) => {
+    builder.addCase(deleteSliderImages.fulfilled, (state, action) => {
       const index = state.findIndex((branch) => branch.id === action.payload.data.id);
       state.splice(index, 1);
     });
   }
 });
 
-export const selectAllBranch = (state) => state.branch;
+export const selectAllSliderImages = (state) => state.sliderImages;
 
-const { reducer } = branchSlice;
+const { reducer } = sliderImageSlice;
 export default reducer;
