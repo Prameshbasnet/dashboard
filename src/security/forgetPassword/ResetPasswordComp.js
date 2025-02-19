@@ -4,7 +4,7 @@ import ChangePasswordForm from './ChangePasswordForm';
 import LoginCurve from '../../assets/images/Login/curve.png';
 import PoweredByLogo from '../../assets/images/Login/logo.png';
 import logo from '../../../src/assets/images/logo/logo.png';
-import EfcuImage from '../../assets/images/Login/login.svg';
+import Image from '../../assets/images/Login/login.svg';
 const ResetPasswordComp = () => {
   const [openToast, setOpenToast] = useState(false);
 
@@ -15,7 +15,7 @@ const ResetPasswordComp = () => {
   return (
     <div className="loginbackground relative">
       <div className="md:hidden clientimg">
-        <img src={EfcuImage} alt="clientlogo" />
+        <img src={Image} alt="clientlogo" />
       </div>
       <div className=" loginshadow">
         <div className="logingrid">
@@ -31,7 +31,7 @@ const ResetPasswordComp = () => {
                 <h1 className="productdesigntext">Dashboard</h1>
               </div>
               <div className="productimage w-72">
-                <img src={EfcuImage} alt="productimage" />
+                <img src={Image} alt="productimage" />
               </div>
             </div>
             <div className="logincurve">

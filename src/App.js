@@ -23,9 +23,9 @@ const AppRoutes = () => {
       {/* <Route element={<PrivateRoutes />}> */}
       <Route path="/" element={<MainLayout />}>
         <Route path="" element={<DashboardDefault />} index />
-        <Route path="user" element={<User />} />
-        <Route path="add-user" element={<AddUserForm isNewUser={true} />} />
-        <Route path="edit-user/:id" element={<AddUserForm isNewUser={false} />} />
+        <Route path="/user" element={<User />} />
+        <Route path="/add-user" element={<AddUserForm isNewUser={true} />} />
+        <Route path="/edit-user/:id" element={<AddUserForm isNewUser={false} />} />
       </Route>
       <Route path="/login" element={<AuthLogin />} />
       <Route path="/reset-password" element={<ChangePasswordComp />} />
