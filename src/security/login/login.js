@@ -132,7 +132,7 @@ const AuthLogin = () => {
             </div>
             <div className="textalignment">
               <div className="loginflex">
-                <div className="topheadertext">Welcome Back</div>
+                <div className="topheadertext">Welcome</div>
               </div>
               <div className="producttext">
                 <h1 className="productdesigntext">Dashboard</h1>

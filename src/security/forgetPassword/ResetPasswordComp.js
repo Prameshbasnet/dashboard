@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import Toast from 'components/Toast';
-import NIMB_logo from '../../../src/assets/images/TU.png';
-import siddhartha_logo from '../../../src/assets/images/TU.png';
-import Machha_Puchre_logo from '../../../src/assets/images/TU.png';
 import ChangePasswordForm from './ChangePasswordForm';
-import ProductImage from '../../assets/images/Login/logo.png';
 import LoginCurve from '../../assets/images/Login/curve.png';
-import PoweredByLogo from '../../assets/images/Login/gentech.png';
-
-const BANK_NAME = process.env.REACT_APP_BANK_NAME;
-
+import PoweredByLogo from '../../assets/images/Login/logo.png';
+import logo from '../../../src/assets/images/logo/logo.png';
+import EfcuImage from '../../assets/images/Login/login.svg';
 const ResetPasswordComp = () => {
   const [openToast, setOpenToast] = useState(false);
-
-  const logo = BANK_NAME === 'NIMB' ? NIMB_logo : BANK_NAME === 'MACHHA_PUCHCHHRE' ? Machha_Puchre_logo : siddhartha_logo;
 
   const handleCloseToast = () => {
     setOpenToast(false);
@@ -22,26 +15,23 @@ const ResetPasswordComp = () => {
   return (
     <div className="loginbackground relative">
       <div className="md:hidden clientimg">
-        <img src={logo} alt="clientlogo" />
+        <img src={EfcuImage} alt="clientlogo" />
       </div>
       <div className=" loginshadow">
         <div className="logingrid">
           <div className="leftsection">
-            <div className="clientimg">
+            <div className="clientimg ">
               <img src={logo} alt="clientlogo" />
             </div>
             <div className="textalignment">
               <div className="loginflex">
-                <div className="topheadertext">Welcome Back</div>
-                <div className="text-[#595959] self-stretch text-[12px] font-[400] leading-[20.13px]  text-center">
-                  Self-service machine for banking transactions.
-                </div>
+                <div className="topheadertext">Welcome</div>
               </div>
               <div className="producttext">
-                <h1 className="productdesigntext">KIOSK</h1>
+                <h1 className="productdesigntext">Dashboard</h1>
               </div>
-              <div className="productimage">
-                <img src={ProductImage} alt="productimage" />
+              <div className="productimage w-72">
+                <img src={EfcuImage} alt="productimage" />
               </div>
             </div>
             <div className="logincurve">
