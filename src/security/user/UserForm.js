@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   TextField,
   Button,
-  FormGroup,
   FormControl,
   Select,
   Stack,
@@ -15,25 +14,23 @@ import {
   InputAdornment,
   Grid,
   IconButton
-} from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { addUser, editUser, selectAllUsers } from "store/slice/user";
-import { useDispatch, useSelector } from "react-redux";
-import Toast from "components/Toast";
-import { fetchRoles, selectAllRole } from "store/slice/role";
-import { handleResponse } from "utils/handleAPIResponse";
-import { getValidationSchema } from "./userValidationSchema";
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { addUser, editUser, selectAllUsers } from 'store/slice/user';
+import { useDispatch, useSelector } from 'react-redux';
+import Toast from 'components/Toast';
+import { fetchRoles, selectAllRole } from 'store/slice/role';
+import { handleResponse } from 'utils/handleAPIResponse';
 
 const AddUserForm = ({ isNewUser }) => {
   const users = useSelector(selectAllUsers);
   const roles = useSelector(selectAllRole);
-  const validationSchema = getValidationSchema(isNewUser);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [openToast, setOpenToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastSeverity, setToastSeverity] = useState("success");
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastSeverity, setToastSeverity] = useState('success');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -50,22 +47,20 @@ const AddUserForm = ({ isNewUser }) => {
   const userData = isNewUser ? null : getUserDataById(id);
 
   const initialValues = {
-    firstName: userData ? userData.firstName : "",
-    middleName: userData ? userData.middleName : "",
-    lastName: userData ? userData.lastName : "",
-    gender: userData ? userData.gender : "",
-    username: userData ? userData.userName : "",
-    email: userData ? userData.email : "",
-    phoneNumber: userData ? userData.phoneNumber : "",
-    lockoutCount: userData ? userData.lockoutCount : "",
-    title: userData ? userData.title : "",
+    firstName: userData ? userData.firstName : '',
+    middleName: userData ? userData.middleName : '',
+    lastName: userData ? userData.lastName : '',
+    gender: userData ? userData.gender : '',
+    username: userData ? userData.userName : '',
+    email: userData ? userData.email : '',
+    phoneNumber: userData ? userData.phoneNumber : '',
+    title: userData ? userData.title : '',
     roleIds: userData ? userData.roles.map((ele) => ele.id) : [],
-    userPassword: "",
-    confirmPassword: ""
+    userPassword: '',
+    confirmPassword: ''
   };
   const formik = useFormik({
     initialValues,
-    validationSchema,
     onSubmit: async (values) => {
       try {
         const action = isNewUser ? await dispatch(addUser(values)) : await dispatch(editUser({ id, userData: values }));
@@ -73,21 +68,21 @@ const AddUserForm = ({ isNewUser }) => {
           action,
           (successMessage) => {
             setToastMessage(successMessage);
-            setToastSeverity("success");
+            setToastSeverity('success');
             setOpenToast(true);
             setTimeout(() => {
-              navigate("/user");
+              navigate('/user');
             }, 1000);
           },
           (errorMessage) => {
             setToastMessage(errorMessage);
-            setToastSeverity("error");
+            setToastSeverity('error');
             setOpenToast(true);
           }
         );
       } catch (error) {
-        setToastMessage("User operation unsuccessful");
-        setToastSeverity("error");
+        setToastMessage('User operation unsuccessful');
+        setToastSeverity('error');
         setOpenToast(true);
       }
     }
@@ -108,10 +103,10 @@ const AddUserForm = ({ isNewUser }) => {
   };
 
   return (
-    <div style={{ width: "100%", padding: "50px" }}>
+    <div style={{ width: '100%', padding: '50px' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4" gutterBottom>
-          {isNewUser ? "Add User" : "Edit User"}
+          {isNewUser ? 'Add User' : 'Edit User'}
         </Typography>
       </Stack>
       <Container component="main">
@@ -173,7 +168,7 @@ const AddUserForm = ({ isNewUser }) => {
                   <MenuItem value="female">Female</MenuItem>
                   <MenuItem value="other">Other</MenuItem>
                 </Select>
-                {touched.gender && errors.gender && <div style={{ color: "red" }}>{errors.gender}</div>}
+                {touched.gender && errors.gender && <div style={{ color: 'red' }}>{errors.gender}</div>}
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -256,7 +251,7 @@ const AddUserForm = ({ isNewUser }) => {
                     </MenuItem>
                   ))}
                 </Select>
-                {touched.roleIds && errors.roleIds && <div style={{ color: "red", fontSize: "12px" }}>{errors.roleIds}</div>}
+                {touched.roleIds && errors.roleIds && <div style={{ color: 'red', fontSize: '12px' }}>{errors.roleIds}</div>}
               </FormControl>
             </Grid>
             {isNewUser && (
@@ -269,7 +264,7 @@ const AddUserForm = ({ isNewUser }) => {
                     fullWidth
                     label="Password"
                     name="userPassword"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     value={values.userPassword}
                     onChange={handleChange}
                     error={touched.userPassword && Boolean(errors.userPassword)}
@@ -293,7 +288,7 @@ const AddUserForm = ({ isNewUser }) => {
                     label="Confirm Password"
                     fullWidth
                     name="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     value={values.confirmPassword}
                     onChange={handleChange}
                     error={touched.confirmPassword && Boolean(errors.confirmPassword)}
@@ -311,25 +306,9 @@ const AddUserForm = ({ isNewUser }) => {
                 </Grid>
               </>
             )}
-            <Grid item xs={12}>
-              <FormGroup style={{ justifyContent: "center" }}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  id="lockoutCount"
-                  label="Lockout Count"
-                  name="lockoutCount"
-                  fullWidth
-                  value={values.lockoutCount}
-                  onChange={handleChange}
-                  error={touched.lockoutCount && Boolean(errors.lockoutCount)}
-                  helperText={touched.lockoutCount && errors.lockoutCount}
-                />
-              </FormGroup>
-            </Grid>
-            <Grid item xs={12} style={{ display: "flex", justifyContent: "space-between", gap: "1rem", marginTop: "1rem" }}>
+            <Grid item xs={12} style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', marginTop: '1rem' }}>
               <Button type="submit" fullWidth variant="contained" color="primary">
-                {isNewUser ? "Submit" : "Save"}
+                {isNewUser ? 'Submit' : 'Save'}
               </Button>
             </Grid>
           </Grid>

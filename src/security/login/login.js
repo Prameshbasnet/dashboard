@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import EfcuImage from '../../assets/images/Login/login.svg';
+import Logo from '../../assets/images/Login/login.svg';
 import LoginCurve from '../../assets/images/Login/curve.png';
 import PoweredByLogo from '../../assets/images/Login/logo.png';
 import {
@@ -132,13 +132,13 @@ const AuthLogin = () => {
             </div>
             <div className="textalignment">
               <div className="loginflex">
-                <div className="topheadertext">Welcome Back</div>
+                <div className="topheadertext">Welcome</div>
               </div>
               <div className="producttext">
                 <h1 className="productdesigntext">Dashboard</h1>
               </div>
               <div className="productimage w-72">
-                <img src={EfcuImage} alt="EfcuImage" />
+                <img src={Logo} alt="Logo" />
               </div>
             </div>
             <div className="logincurve">

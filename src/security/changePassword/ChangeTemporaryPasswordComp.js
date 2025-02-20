@@ -27,7 +27,7 @@ const ChangeTemporaryPasswordComp = () => {
             <div className="textalignment">
               <div className="loginflex">
                 <div className="topheadertext">Welcome Back</div>
-                <div className="text-[#595959] self-stretch text-[12px] font-[400] leading-[20.13px]  text-center">----EFCU Admin ---</div>
+                <div className="text-[#595959] self-stretch text-[12px] font-[400] leading-[20.13px]  text-center">Admin</div>
               </div>
               <div className="producttext">{/* <h1 className="productdesigntext">Prabhu</h1> */}</div>
               <div className="productimage w-80">

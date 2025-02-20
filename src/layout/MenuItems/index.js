@@ -1,13 +1,20 @@
-import { SettingOutlined, DashboardOutlined } from '@ant-design/icons';
+import { SettingOutlined, DashboardOutlined, QrcodeOutlined } from '@ant-design/icons';
 
 export const getMenuItems = () => {
   return [
     { key: '1', icon: <DashboardOutlined />, label: 'Dashboard', url: '/', alias: 'Dashboard' },
     {
+      key: '4',
+      icon: <QrcodeOutlined />,
+      label: 'Generate QR Code',
+      url: '/generate-qr-code',
+      alias: 'GenerateQrCode'
+    },
+    {
       key: '2',
       icon: <SettingOutlined />,
-      label: 'Settings',
-      children: [{ key: '11', label: 'User', url: '/user', alias: 'Master' }]
+      label: 'Setting',
+      children: [{ key: '3', label: 'User', url: '/user', alias: 'Master' }]
     }
   ];
 };

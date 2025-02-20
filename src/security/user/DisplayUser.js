@@ -7,20 +7,9 @@ import DialogMessage from 'components/DialogMessage';
 import Toast from 'components/Toast';
 import { deleteUser, fetchAllUsers, selectAllUsers } from 'store/slice/user';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkIsAuthorized } from 'utils/checkIsAuthorized';
-import { decodeBase64Data } from 'utils/decode';
 
 const User = () => {
   const users = useSelector(selectAllUsers);
-
-  let allModulePerms;
-  const localToken = localStorage.getItem('token');
-  const decodedData = decodeBase64Data(localToken);
-
-  if (decodedData) {
-    const { modulePermission } = decodedData;
-    allModulePerms = modulePermission;
-  }
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -102,11 +91,9 @@ const User = () => {
         <Typography variant="h4" gutterBottom>
           Users
         </Typography>
-        {checkIsAuthorized(allModulePerms, 'Master', 'Create') && (
-          <Button variant="primary" startIcon={<PlusCircleFilled />} onClick={() => addUser(false)}>
-            New User
-          </Button>
-        )}
+        <Button variant="primary" startIcon={<PlusCircleFilled />} onClick={() => addUser(false)}>
+          New User
+        </Button>
       </Stack>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>

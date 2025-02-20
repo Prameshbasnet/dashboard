@@ -1,42 +1,45 @@
-import React, { useState } from "react";
-import { InputLabel, OutlinedInput, FormControl, Button, FormHelperText } from "@mui/material";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup"; // Import Yup for validation
-import PropTypes from "prop-types";
-import { Link, useParams, useNavigate } from "react-router-dom"; // Import useLocation
-import { useDispatch } from "react-redux";
-import { postResetPassword } from "store/slice/resetPassword";
-import Toast from "components/Toast";
+import React, { useState } from 'react';
+import { InputLabel, OutlinedInput, FormControl, Button, FormHelperText } from '@mui/material';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup'; // Import Yup for validation
+import PropTypes from 'prop-types';
+import { Link, useParams, useNavigate } from 'react-router-dom'; // Import useLocation
+import { useDispatch } from 'react-redux';
+import { postResetPassword } from 'store/slice/resetPassword';
+import Toast from 'components/Toast';
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
-  password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
+  password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
-    .required("Confirm Password is required")
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .required('Confirm Password is required')
 });
 
-const ChangePasswordForm = ( ) => {
+const ChangePasswordForm = () => {
   const [openToast, setOpenToast] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate(); // Initialize useNavigate for redirection
   const { token } = useParams(); // Get the token from URL params
   const handleChangePassword = (values, { setSubmitting }) => {
     setSubmitting(true);
-    dispatch(postResetPassword(values)).unwrap().then(() =>{
-      setToastMessage("Password Reset Successful")
-      setToastSeverity("success");
-      setOpenToast(true)
-      navigate("/login"); 
-    }).catch(()=>{
-      setToastMessage(" Opps error occured . Please Try Again later")
-      setToastSeverity("error");
-      setOpenToast(true)
-    })
+    dispatch(postResetPassword(values))
+      .unwrap()
+      .then(() => {
+        setToastMessage('Password Reset Successful');
+        setToastSeverity('success');
+        setOpenToast(true);
+        navigate('/login');
+      })
+      .catch(() => {
+        setToastMessage(' Opps error occured . Please Try Again later');
+        setToastSeverity('error');
+        setOpenToast(true);
+      });
     setSubmitting(false);
   };
-      const [toastMessage, setToastMessage] = useState("");
-    const [toastSeverity, setToastSeverity] = useState("success");
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastSeverity, setToastSeverity] = useState('success');
 
   const handleCloseToast = () => {
     setOpenToast(false);
@@ -44,11 +47,13 @@ const ChangePasswordForm = ( ) => {
 
   return (
     <div>
-      <div className="logintitle" style={{fontSize:"24px"}}>Change Password</div>
+      <div className="logintitle" style={{ fontSize: '24px' }}>
+        Change Password
+      </div>
       <div className="formcomponent">
         <Formik
-          initialValues={{ token:token ,password: "", confirmPassword: "" }}
-          validationSchema={validationSchema} 
+          initialValues={{ token: token, password: '', confirmPassword: '' }}
+          validationSchema={validationSchema}
           onSubmit={handleChangePassword}
         >
           {({ errors, touched, isSubmitting }) => (
@@ -62,7 +67,7 @@ const ChangePasswordForm = ( ) => {
               <FormControl
                 fullWidth={true}
                 error={Boolean(errors.confirmPassword && touched.confirmPassword)}
-                style={{ marginTop: "20px" }}
+                style={{ marginTop: '20px' }}
               >
                 <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
                 <Field
@@ -83,21 +88,21 @@ const ChangePasswordForm = ( ) => {
                   variant="contained"
                   color="primary"
                   disabled={isSubmitting}
-                  style={{ marginTop: "20px" }}
+                  style={{ marginTop: '20px' }}
                 >
                   Change Password
                 </Button>
               </div>
               <div className="mt-4 text-center">
-                <Link to ="/login">
-                  <Button >Login</Button>
+                <Link to="/login">
+                  <Button>Login</Button>
                 </Link>
               </div>
             </Form>
           )}
         </Formik>
       </div>
-      <Toast open={openToast} onClose={handleCloseToast} severity={toastSeverity} message={toastMessage}/>
+      <Toast open={openToast} onClose={handleCloseToast} severity={toastSeverity} message={toastMessage} />
     </div>
   );
 };
