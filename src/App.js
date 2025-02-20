@@ -4,6 +4,7 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout/index';
 import ThemeCustomization from 'assets/themes/index';
+import GenerateQrCode from 'security/qrCode/GenerateQrCode';
 // import { useSelector } from 'react-redux';
 // import AuthorizedRoute from 'store/axios/AuthorizedRoute';
 // import AccountSettings from 'security/settings/AccountSettings';
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path="/user" element={<User />} />
         <Route path="/add-user" element={<AddUserForm isNewUser={true} />} />
         <Route path="/edit-user/:id" element={<AddUserForm isNewUser={false} />} />
+        <Route path="/generate-qr-code" element={<GenerateQrCode />} />
       </Route>
       <Route path="/login" element={<AuthLogin />} />
       <Route path="/reset-password" element={<ChangePasswordComp />} />
