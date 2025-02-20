@@ -5,9 +5,9 @@ export const getMenuItems = () => {
     { key: '1', icon: <DashboardOutlined />, label: 'Dashboard', url: '/', alias: 'Dashboard' },
     {
       key: '2',
-      icon: <SettingOutlined />, // Ensure the icon is correctly used here
-      label: 'Settings',
-      children: [{ key: '11', label: 'User', url: '/user' }]
+      icon: <SettingOutlined />,
+      label: 'Setting',
+      children: [{ key: '3', label: 'User', url: '/user', alias: 'Master' }]
     }
   ];
 };

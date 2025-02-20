@@ -7,7 +7,7 @@ import { Box, Toolbar, useMediaQuery } from '@mui/material';
 // project import
 import Drawer from './Drawer';
 import Header from './Header';
-// import Breadcrumbs from 'components/@extended/Breadcrumbs';
+import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import Footer from './Footer'; // Import Footer component
 
 // types
@@ -16,6 +16,12 @@ import { openDrawer } from 'store/slice/menu';
 // ==============================|| MAIN LAYOUT ||============================== //
 
 const MainLayout = () => {
+  useEffect(() => {
+    if (!sessionStorage.getItem('hasReloaded')) {
+      sessionStorage.setItem('hasReloaded', 'true');
+      window.location.reload();
+    }
+  }, []);
   const theme = useTheme();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const dispatch = useDispatch();
@@ -50,8 +56,17 @@ const MainLayout = () => {
       <Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
         <Toolbar />
-        {/* <Breadcrumbs navigation={navigation} title /> */}
-        <Box>
+        <Breadcrumbs navigation={navigation} title />
+        <Box
+          sx={{
+            borderRadius: '15px',
+            padding: '20px',
+            margin: '20px',
+            // boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.15)", // Soft shadow
+            boxShadow: 'rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px',
+            backgroundColor: '#fff' // White background
+          }}
+        >
           <Outlet />
         </Box>
         <Footer />
