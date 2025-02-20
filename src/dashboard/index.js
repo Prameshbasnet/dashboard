@@ -1,60 +1,9 @@
-import {
-  // Avatar,
-  // AvatarGroup,
-  // Button,
-  Grid,
-  // List,
-  // ListItemAvatar,
-  // ListItemButton,
-  // ListItemSecondaryAction,
-  // ListItemText,
-
-  // Stack,
-  Typography
-} from '@mui/material';
-
-import OrdersTable from './OrdersTable';
-// import IncomeAreaChart from "./IncomeAreaChart";
-
-import MainCard from 'components/MainCard';
+import { Grid, Typography } from '@mui/material';
 
 // assets
 
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 import PieChartApplication from './PieChartApplication';
-
-// avatar style
-// const avatarSX = {
-//   width: 36,
-//   height: 36,
-//   fontSize: "1rem"
-// };
-
-// action style
-// const actionSX = {
-//   mt: 0.75,
-//   ml: 1,
-//   top: "auto",
-//   right: "auto",
-//   alignSelf: "flex-start",
-//   transform: "none"
-// };
-
-// sales report status
-// const status = [
-//   {
-//     value: "today",
-//     label: "Today"
-//   },
-//   {
-//     value: "month",
-//     label: "This Month"
-//   },
-//   {
-//     value: "year",
-//     label: "This Year"
-//   }
-// ];
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -89,21 +38,6 @@ const DashboardDefault = () => {
         <PieChartApplication />
       </Grid>
       {/* row 3 */}
-      <Grid item xs={12} md={7} lg={8}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Application</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <OrdersTable />
-        </MainCard>
-      </Grid>
-
-      {/* row 4 */}
-
-      {/* row 5 */}
     </Grid>
   );
 };

@@ -53,84 +53,42 @@ export default function AuthRegister() {
     <>
       <Formik
         initialValues={{
-          firstname: '',
-          lastname: '',
+          fullName: '',
           email: '',
-          company: '',
           password: '',
+          confirmPassword: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          firstname: Yup.string().max(255).required('First Name is required'),
-          lastname: Yup.string().max(255).required('Last Name is required'),
+          fullName: Yup.string().max(255).required('Full Name is required'),
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string().max(255).required('Password is required')
+          password: Yup.string().max(255).required('Password is required'),
+          confirmPassword: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Passwords must match')
+            .required('Confirm Password is required')
         })}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="firstname-signup">First Name*</InputLabel>
-                  <OutlinedInput
-                    id="firstname-login"
-                    type="firstname"
-                    value={values.firstname}
-                    name="firstname"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="John"
-                    fullWidth
-                    error={Boolean(touched.firstname && errors.firstname)}
-                  />
-                </Stack>
-                {touched.firstname && errors.firstname && (
-                  <FormHelperText error id="helper-text-firstname-signup">
-                    {errors.firstname}
-                  </FormHelperText>
-                )}
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.lastname && errors.lastname)}
-                    id="lastname-signup"
-                    type="lastname"
-                    value={values.lastname}
-                    name="lastname"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    inputProps={{}}
-                  />
-                </Stack>
-                {touched.lastname && errors.lastname && (
-                  <FormHelperText error id="helper-text-lastname-signup">
-                    {errors.lastname}
-                  </FormHelperText>
-                )}
-              </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="company-signup">Company</InputLabel>
+                  <InputLabel htmlFor="fullName-signup">Full Name*</InputLabel>
                   <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.company && errors.company)}
-                    id="company-signup"
-                    value={values.company}
-                    name="company"
+                    id="fullName-signup"
+                    type="text"
+                    value={values.fullName}
+                    name="fullName"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Demo Inc."
-                    inputProps={{}}
+                    placeholder="John Doe"
+                    fullWidth
+                    error={Boolean(touched.fullName && errors.fullName)}
                   />
                 </Stack>
-                {touched.company && errors.company && (
-                  <FormHelperText error id="helper-text-company-signup">
-                    {errors.company}
+                {touched.fullName && errors.fullName && (
+                  <FormHelperText error id="helper-text-fullName-signup">
+                    {errors.fullName}
                   </FormHelperText>
                 )}
               </Grid>
@@ -140,7 +98,7 @@ export default function AuthRegister() {
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
-                    id="email-login"
+                    id="email-signup"
                     type="email"
                     value={values.email}
                     name="email"
@@ -158,7 +116,7 @@ export default function AuthRegister() {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-signup">Password</InputLabel>
+                  <InputLabel htmlFor="password-signup">Password*</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
@@ -193,18 +151,28 @@ export default function AuthRegister() {
                     {errors.password}
                   </FormHelperText>
                 )}
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item>
-                      <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="subtitle1" fontSize="0.75rem">
-                        {level?.label}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="confirmPassword-signup">Confirm Password*</InputLabel>
+                  <OutlinedInput
+                    fullWidth
+                    error={Boolean(touched.confirmPassword && errors.confirmPassword)}
+                    id="confirmPassword-signup"
+                    type={showPassword ? 'text' : 'password'}
+                    value={values.confirmPassword}
+                    name="confirmPassword"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    placeholder="******"
+                    inputProps={{}}
+                  />
+                </Stack>
+                {touched.confirmPassword && errors.confirmPassword && (
+                  <FormHelperText error id="helper-text-confirmPassword-signup">
+                    {errors.confirmPassword}
+                  </FormHelperText>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2">

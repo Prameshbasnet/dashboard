@@ -7,6 +7,7 @@ export const getMenuItems = () => {
       key: '4',
       icon: <QrcodeOutlined />,
       label: 'Generate QR Code',
+      url: '/generate-qr-code',
       alias: 'GenerateQrCode'
     },
     {
