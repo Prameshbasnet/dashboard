@@ -7,7 +7,7 @@ import { Box, Toolbar, useMediaQuery } from '@mui/material';
 // project import
 import Drawer from './Drawer';
 import Header from './Header';
-import Breadcrumbs from 'components/@extended/Breadcrumbs';
+// import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import Footer from './Footer'; // Import Footer component
 
 // types
@@ -56,7 +56,7 @@ const MainLayout = () => {
       <Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
         <Toolbar />
-        <Breadcrumbs navigation={navigation} title />
+        {/* <Breadcrumbs navigation={navigation} title /> */}
         <Box
           sx={{
             borderRadius: '15px',

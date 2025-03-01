@@ -14,6 +14,7 @@ import ChangeTemporaryPasswordComp from 'security/changePassword/ChangeTemporary
 import AuthRegister from 'security/signUp/SignUp';
 import User from 'security/user/DisplayUser';
 import AddUserForm from 'security/user/UserForm';
+import Review from 'security/review/DisplayReview';
 
 const DashboardDefault = Loadable(lazy(() => import('dashboard')));
 const AuthLogin = Loadable(lazy(() => import('security/login/login')));
@@ -28,6 +29,7 @@ const AppRoutes = () => {
         <Route path="/add-user" element={<AddUserForm isNewUser={true} />} />
         <Route path="/edit-user/:id" element={<AddUserForm isNewUser={false} />} />
         <Route path="/generate-qr-code" element={<GenerateQrCode />} />
+        <Route path="/review" element={<Review />} />
       </Route>
       <Route path="/login" element={<AuthLogin />} />
       <Route path="/reset-password" element={<ChangePasswordComp />} />

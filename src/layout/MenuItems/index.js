@@ -14,7 +14,10 @@ export const getMenuItems = () => {
       key: '2',
       icon: <SettingOutlined />,
       label: 'Setting',
-      children: [{ key: '3', label: 'User', url: '/user', alias: 'Master' }]
+      children: [
+        { key: '3', label: 'User', url: '/user', alias: 'Master' },
+        { key: '5', label: 'Review', url: '/review', alias: 'Master' }
+      ]
     }
   ];
 };

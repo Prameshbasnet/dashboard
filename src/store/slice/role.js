@@ -1,10 +1,10 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { setMessage } from "./message";
-import { getAxiosInstance } from "store/axios/AxiosInstance";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { setMessage } from './message';
+import { getAxiosInstance } from 'store/axios/AxiosInstance';
 
-const AxiosInstance = getAxiosInstance("identityUrl");
+const AxiosInstance = getAxiosInstance('authUrl');
 
-export const fetchRoles = createAsyncThunk("roles/fetch", async (__, thunkAPI) => {
+export const fetchRoles = createAsyncThunk('roles/fetch', async (__, thunkAPI) => {
   try {
     const response = await AxiosInstance.get(`/roles`);
     return response.data;
@@ -15,7 +15,7 @@ export const fetchRoles = createAsyncThunk("roles/fetch", async (__, thunkAPI) =
   }
 });
 
-export const addRole = createAsyncThunk("roles/add", async (userData, thunkAPI) => {
+export const addRole = createAsyncThunk('roles/add', async (userData, thunkAPI) => {
   try {
     const response = await AxiosInstance.post(`/roles`, userData);
     return response.data;
@@ -26,7 +26,7 @@ export const addRole = createAsyncThunk("roles/add", async (userData, thunkAPI) 
   }
 });
 
-export const editRole = createAsyncThunk("roles/edit", async ({ id, data }, thunkAPI) => {
+export const editRole = createAsyncThunk('roles/edit', async ({ id, data }, thunkAPI) => {
   try {
     const response = await AxiosInstance.put(`/roles/${id}`, data);
     return response.data;
@@ -37,7 +37,7 @@ export const editRole = createAsyncThunk("roles/edit", async ({ id, data }, thun
   }
 });
 
-export const deleteRole = createAsyncThunk("roles/delete", async (id, thunkAPI) => {
+export const deleteRole = createAsyncThunk('roles/delete', async (id, thunkAPI) => {
   try {
     const response = await AxiosInstance.delete(`/roles/${id}`);
     return response.data;
@@ -49,7 +49,7 @@ export const deleteRole = createAsyncThunk("roles/delete", async (id, thunkAPI) 
 });
 
 const roleSlice = createSlice({
-  name: "role",
+  name: 'role',
   initialState: [],
   reducers: {},
   extraReducers(builder) {

@@ -11,6 +11,8 @@ const UserTable = ({ users, handleEdit, handleDelete }) => {
   const [tableKey, setTableKey] = useState(Math.random());
 
   let allModulePerms;
+  console.log(allModulePerms);
+
   const localToken = localStorage.getItem('token');
   const decodedData = decodeBase64Data(localToken);
 
@@ -18,8 +20,6 @@ const UserTable = ({ users, handleEdit, handleDelete }) => {
     const { modulePermission } = decodedData;
     allModulePerms = modulePermission;
   }
-
-  console.log(allModulePerms);
 
   useEffect(() => {
     setTableKey(Math.random());

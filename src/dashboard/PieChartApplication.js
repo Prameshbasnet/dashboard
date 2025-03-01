@@ -3,9 +3,9 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
 const PieChartApplication = ({ data }) => {
-  const { Bijay } = data;
-  const series = [Bijay];
-  const labels = ['Bijay'];
+  const { Dummy } = data;
+  const series = [Dummy];
+  const labels = ['Dummy'];
   const options = {
     chart: {
       width: '100%',
@@ -33,7 +33,7 @@ const PieChartApplication = ({ data }) => {
 
 // Generating dummy data
 const dummyData = {
-  Bijay: Math.floor(Math.random() * 100)
+  Dummy: Math.floor(Math.random() * 100)
 };
 
 const App = () => (

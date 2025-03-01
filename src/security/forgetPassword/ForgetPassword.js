@@ -1,41 +1,38 @@
-import React, { useState } from "react";
-import { InputLabel, OutlinedInput, FormControl, Button, FormHelperText } from "@mui/material";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
-import Toast from "components/Toast"; // Import the Toast component
-import { requestRestPassword } from "store/slice/resetPassword";
+import React, { useState } from 'react';
+import { InputLabel, OutlinedInput, FormControl, Button, FormHelperText } from '@mui/material';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import Toast from 'components/Toast'; // Import the Toast component
+import { requestRestPassword } from 'store/slice/resetPassword';
 
 const validationSchema = Yup.object({
-  Email: Yup.string().email("Invalid email address").required("Email is required")
+  Email: Yup.string().email('Invalid email address').required('Email is required')
 });
 
 const ForgetPassword = ({ handleShowPassword }) => {
   const dispatch = useDispatch();
   const [openToast, setOpenToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastSeverity, setToastSeverity] = useState("error");
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastSeverity, setToastSeverity] = useState('error');
 
   const handleResetPassword = (values, { setSubmitting }) => {
     setSubmitting(true);
     dispatch(requestRestPassword(values))
       .unwrap()
       .then(() => {
-        setToastSeverity("success");
-        setToastMessage("Password reset request successful. Please check your email.");
+        setToastSeverity('success');
+        setToastMessage('Password reset request successful. Please check your email.');
         setOpenToast(true);
         setTimeout(() => {
-        handleShowPassword(false);
+          handleShowPassword(false);
         }, 5000);
-
       })
       .catch((error) => {
-        setToastSeverity("error");
-        setToastMessage(error || "Failed to reset password. Please try again.");
+        setToastSeverity('error');
+        setToastMessage(error || 'Failed to reset password. Please try again.');
         setOpenToast(true);
-        console.log(error);
-        
       })
       .finally(() => {
         setSubmitting(false);
@@ -44,13 +41,11 @@ const ForgetPassword = ({ handleShowPassword }) => {
 
   return (
     <div>
-      <div className="logintitle" style={{ fontSize: "24px" }}>Reset Password</div>
+      <div className="logintitle" style={{ fontSize: '24px' }}>
+        Reset Password
+      </div>
       <div className="formcomponent">
-        <Formik
-          initialValues={{ Email: "" }}
-          validationSchema={validationSchema}
-          onSubmit={handleResetPassword}
-        >
+        <Formik initialValues={{ Email: '' }} validationSchema={validationSchema} onSubmit={handleResetPassword}>
           {({ errors, touched, isSubmitting }) => (
             <Form>
               <FormControl fullWidth={true} error={Boolean(errors.Email && touched.Email)}>
