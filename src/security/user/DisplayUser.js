@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, Typography, Button, Grid } from '@mui/material';
+import { Typography, Button, Grid, Container, Paper, Box } from '@mui/material';
 import { PlusCircleFilled } from '@ant-design/icons';
-import UserTable from '../user/userTable'; // Ensure this matches the actual file name casing
+import UserTable from '../user/userTable';
 import { useNavigate } from 'react-router-dom';
 import DialogMessage from 'components/DialogMessage';
 import Toast from 'components/Toast';
@@ -10,106 +10,78 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const User = () => {
   const users = useSelector(selectAllUsers);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // eslint-disable-next-line no-unused-vars
-  const [isLoading, setIsLoading] = useState(true);
-  const [openMessageDialog, setopenDialogMessage] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [openMessageDialog, setOpenMessageDialog] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-  // eslint-disable-next-line no-unused-vars
   const [toastSeverity, setToastSeverity] = useState('success');
 
   useEffect(() => {
     dispatch(fetchAllUsers());
   }, [dispatch]);
 
-  const addUser = (isEdit = false, id = null) => {
-    if (isEdit) {
-      setDeleteId(id);
-      navigate(`/edit-user/${id}`);
-    } else {
-      setDeleteId(null);
-      navigate('/add-user');
-    }
-  };
-
-  const handleEdit = (id) => {
-    addUser(true, id);
+  const handleNavigation = (isEdit = false, id = null) => {
+    navigate(isEdit ? `/edit-user/${id}` : '/add-user');
   };
 
   const handleDelete = (id) => {
     setDeleteId(id);
-    setopenDialogMessage(true);
-  };
-
-  const handleCloseToast = () => {
-    setOpenToast(false);
+    setOpenMessageDialog(true);
   };
 
   const handleDeleteFinal = () => {
     dispatch(deleteUser(deleteId))
       .unwrap()
-      .then((res) => {
-        const { success, message } = res;
-        if (success) {
-          setToastSeverity('success');
-          setToastMessage(message);
-          setOpenToast(true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        } else {
-          setToastSeverity('error');
-          setToastMessage(message);
-          setOpenToast(true);
-        }
-        setDeleteId(null);
-        setopenDialogMessage(false);
+      .then(({ success, message }) => {
+        setToastSeverity(success ? 'success' : 'error');
+        setToastMessage(message);
+        setOpenToast(true);
+        setOpenMessageDialog(false);
       })
       .catch(() => {
         setToastSeverity('error');
         setToastMessage('An error occurred while deleting.');
         setOpenToast(true);
-        setDeleteId(null);
-        setopenDialogMessage(false);
+        setOpenMessageDialog(false);
       });
   };
 
-  useEffect(() => {
-    if (users?.length > 0) {
-      setIsLoading(false);
-    }
-  }, [users]);
-
   return (
-    <div style={{ width: '100%', padding: '50px' }}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5} width={'80%'}>
-        <Typography variant="h4" gutterBottom>
-          Users
-        </Typography>
-        <Button variant="primary" startIcon={<PlusCircleFilled />} onClick={() => addUser(false)}>
-          New User
-        </Button>
-      </Stack>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={12}>
-          <UserTable users={users} handleEdit={handleEdit} handleDelete={handleDelete} />
+    <Container maxWidth="lg">
+      <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+          <Typography variant="h4" fontWeight="bold">
+            Users
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<PlusCircleFilled />}
+            onClick={() => handleNavigation(false)}
+            sx={{ textTransform: 'none', fontSize: '16px', fontWeight: 'bold' }}
+          >
+            New User
+          </Button>
+        </Box>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <UserTable users={users} handleEdit={(id) => handleNavigation(true, id)} handleDelete={handleDelete} />
+          </Grid>
         </Grid>
-      </Grid>
+      </Paper>
       <DialogMessage
         open={openMessageDialog}
-        onClose={() => setopenDialogMessage(!openMessageDialog)}
+        onClose={() => setOpenMessageDialog(false)}
         title={'Warning!!!'}
         message={'Are you sure you want to Delete?'}
         disagreeButton
         handlefunction={handleDeleteFinal}
       />
-      <Toast open={openToast} onClose={handleCloseToast} severity="success" message={toastMessage} />
-    </div>
+      <Toast open={openToast} onClose={() => setOpenToast(false)} severity={toastSeverity} message={toastMessage} />
+    </Container>
   );
 };
 
