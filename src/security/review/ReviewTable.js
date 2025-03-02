@@ -82,6 +82,8 @@ const ReviewTableComponent = ({
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
+      sorter: (a, b) => a.email.localeCompare(b.email),
+      sortOrder: sortedInfo.columnKey === 'email' && sortedInfo.order,
       headerStyle: { background: '#e6f7ff' },
       ...getColumnSearchProps('email')
     },
@@ -89,6 +91,8 @@ const ReviewTableComponent = ({
       title: 'Message',
       dataIndex: 'message',
       key: 'message',
+      sorter: (a, b) => a.message.localeCompare(b.message),
+      sortOrder: sortedInfo.columnKey === 'message' && sortedInfo.order,
       headerStyle: { background: '#e6f7ff' },
       ...getColumnSearchProps('message')
     },

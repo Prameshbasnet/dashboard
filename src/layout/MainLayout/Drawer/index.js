@@ -1,31 +1,23 @@
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { Box, Drawer, useMediaQuery } from '@mui/material';
-
-// project import
 import DrawerHeader from './DrawerHeader';
 import DrawerContent from './DrawerContent';
 import MiniDrawerStyled from './MiniDrawerStyled';
 import { drawerWidth } from 'config';
 
-// ==============================|| MAIN LAYOUT - DRAWER ||============================== //
-
 const MainDrawer = ({ open, handleDrawerToggle, window }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
-  // responsive drawer container
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container = window ? () => window().document.body : undefined;
 
-  // header content
   const drawerContent = useMemo(() => <DrawerContent />, []);
   const drawerHeader = useMemo(() => <DrawerHeader open={open} />, [open]);
 
   return (
-    <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300 }} aria-label="mailbox folders">
+    <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300 }} aria-label="navigation drawer">
       {!matchDownMD ? (
         <MiniDrawerStyled variant="permanent" open={open}>
           {drawerHeader}
@@ -49,8 +41,8 @@ const MainDrawer = ({ open, handleDrawerToggle, window }) => {
             }
           }}
         >
-          {open && drawerHeader}
-          {open && drawerContent}
+          {drawerHeader}
+          {drawerContent}
         </Drawer>
       )}
     </Box>
