@@ -1,39 +1,18 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
 
-// material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-  Avatar,
-  Box,
-  ButtonBase,
-  CardContent,
-  ClickAwayListener,
-  Grid,
-  IconButton,
-  Paper,
-  Popper,
-  Stack,
-  Tab,
-  Tabs,
-  Typography
-} from '@mui/material';
+import { Avatar, Box, ButtonBase, CardContent, ClickAwayListener, Grid, IconButton, Paper, Popper, Stack, Typography } from '@mui/material';
 
-// project import
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
-import ProfileTab from './ProfileTab';
-import SettingTab from './SettingTab';
 
-// assets
-import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
-// import { getAvatarInitials } from "utils/getAvatarInitials";
+import { LogoutOutlined } from '@ant-design/icons';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from 'store/slice/auth';
 import { getAvatarInitials } from 'utils/getAvatarInitials';
 
-// tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
   return (
     <div role="tabpanel" hidden={value !== index} id={`profile-tabpanel-${index}`} aria-labelledby={`profile-tab-${index}`} {...other}>
@@ -48,15 +27,6 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 
-function a11yProps(index) {
-  return {
-    id: `profile-tab-${index}`,
-    'aria-controls': `profile-tabpanel-${index}`
-  };
-}
-
-// ==============================|| HEADER CONTENT - PROFILE ||============================== //
-
 const Profile = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -66,8 +36,8 @@ const Profile = () => {
   }
 
   const handleLogout = async () => {
-    // logout
     dispatch(signOut());
+    window.location.assign('/login');
   };
 
   const anchorRef = useRef(null);
@@ -81,12 +51,6 @@ const Profile = () => {
       return;
     }
     setOpen(false);
-  };
-
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
   };
 
   const iconBackColorOpen = 'grey.300';
@@ -166,32 +130,6 @@ const Profile = () => {
                         </Grid>
                       </Grid>
                     </CardContent>
-                    {open && (
-                      <>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                          <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="profile tabs">
-                            <Tab
-                              sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'start',
-                                alignItems: 'left',
-                                textTransform: 'capitalize'
-                              }}
-                              icon={<SettingOutlined style={{ marginBottom: 0, marginRight: '10px' }} />}
-                              label="Setting"
-                              {...a11yProps(1)}
-                            />
-                          </Tabs>
-                        </Box>
-                        <TabPanel value={value} index={0} dir={theme.direction}>
-                          <ProfileTab handleLogout={handleLogout} />
-                        </TabPanel>
-                        <TabPanel value={value} index={1} dir={theme.direction}>
-                          <SettingTab />
-                        </TabPanel>
-                      </>
-                    )}
                   </MainCard>
                 </ClickAwayListener>
               </Paper>

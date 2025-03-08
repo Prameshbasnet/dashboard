@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Divider, Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getMenuItems } from '../../../MenuItems/index';
 import { useSelector } from 'react-redux';
 
@@ -8,14 +8,24 @@ function DrawerContent() {
   const [mode] = useState('inline');
   const [theme] = useState('light');
   const [selectedKey, setSelectedKey] = useState('');
+  const [openKeys, setOpenKeys] = useState([]);
 
+  const location = useLocation();
   const moduleName = useSelector((state) => state?.auth?.role);
   const menuItems = getMenuItems(moduleName);
 
   useEffect(() => {
     const matchingItem = menuItems.flatMap((item) => (item.children ? item.children : item)).find((item) => item.url === location.pathname);
+
     if (matchingItem) {
       setSelectedKey(matchingItem.key);
+
+      // Find parent menu keys for submenu expansion
+      const parentItem = menuItems.find((item) => item.children?.some((child) => child.key === matchingItem.key));
+
+      if (parentItem) {
+        setOpenKeys([parentItem.key]); // Ensure submenu opens
+      }
     }
   }, [location.pathname, menuItems]);
 
@@ -43,13 +53,7 @@ function DrawerContent() {
       <Divider type="vertical" />
       <br />
       <br />
-      <Menu
-        style={{ width: 256 }}
-        selectedKeys={[selectedKey]} // Use the dynamic selected key
-        defaultOpenKeys={['sub1']}
-        mode={mode}
-        theme={theme}
-      >
+      <Menu style={{ width: 256 }} selectedKeys={[selectedKey]} defaultOpenKeys={openKeys} mode={mode} theme={theme}>
         {menuItems?.map((item) => {
           if (item.children) {
             return renderSubMenu(item);

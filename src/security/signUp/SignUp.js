@@ -5,6 +5,8 @@ import Toast from 'components/Toast';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import logo from '../../../src/assets/images/logo/logo.png';
 import * as Yup from 'yup';
+import LoginCurve from '../../assets/images/Login/curve.png';
+import PoweredByLogo from '../../assets/images/Login/logo.png';
 
 const AuthSignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -62,7 +64,7 @@ const AuthSignUp = () => {
                 <h1 className="productdesigntext">Dashboard</h1>
               </div>
               <div className="productimage w-72">
-                <img src={Logo} alt="Logo" />
+                <img src={logo} alt="Logo" />
               </div>
             </div>
             <div className="logincurve">

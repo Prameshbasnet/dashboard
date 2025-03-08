@@ -1,33 +1,26 @@
-import { useEffect, useState } from "react";
-import { TextField, Grid } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import PropTypes from "prop-types";
-import Toast from "components/Toast";
-import { addBranch, editBranch, fetchBranch, selectAllBranch } from "store/slice/branch";
-import { Button } from "antd";
+import { useEffect, useState } from 'react';
+import { TextField, Grid } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import PropTypes from 'prop-types';
+import Toast from 'components/Toast';
+import { addBranch, editBranch, fetchBranch, selectAllBranch } from 'store/slice/branch';
+import { Button } from 'antd';
 
 const BranchForm = ({ onClose, isNewBranch, branchId }) => {
-  const regexPattern = /^(?!\d)[^\W\d]+\S*$/;
-  const numberRegexValidation = /^-?\d{1,6}(\.\d{1,5})?$/;
-
   const dispatch = useDispatch();
-
-  const [openMessageDialog, setopenDialogMessage] = useState(false);
-  const [branchFormData, setBranchData] = useState(null);
-  const handleMessageDialogClose = () => {
-    setopenDialogMessage(!openMessageDialog);
-  };
   const branches = useSelector(selectAllBranch);
+
+  const [branchFormData, setBranchData] = useState(null);
   const [openToast, setOpenToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastSeverity, setToastSeverity] = useState("error");
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastSeverity, setToastSeverity] = useState('error');
 
   useEffect(() => {
-    if (isNewBranch === false) {
-      const filterBranch = Array.isArray(branches) && branches?.filter((branch) => branch.id === branchId);
-      setBranchData(filterBranch[0]);
+    if (!isNewBranch) {
+      const branch = branches?.find((branch) => branch.id === branchId);
+      setBranchData(branch || {});
     }
   }, [isNewBranch, branchId, branches]);
 
@@ -35,147 +28,65 @@ const BranchForm = ({ onClose, isNewBranch, branchId }) => {
     dispatch(fetchBranch());
   }, [dispatch]);
 
-  const handleCloseToast = () => {
-    setOpenToast(false);
-  };
+  const handleCloseToast = () => setOpenToast(false);
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    if (isNewBranch === true) {
-      const data = {
-        description: values.description,
-        name: values.name,
-        code: values.code
-      };
+  const handleSubmit = async (values, { setSubmitting }) => {
+    const action = isNewBranch ? addBranch(values) : editBranch({ id: branchId, data: values });
 
-      dispatch(addBranch(data))
-        .unwrap()
-        .then((res) => {
-          if (res.success) {
-            setToastSeverity("success");
-            setToastMessage("Branch Added Successfully");
-            setOpenToast(true);
-            setTimeout(() => {
-              onClose();
-            }, 1000);
-          } else {
-            const errorMessage = res.data && res.data.ModulePermissionIds ? res.data.ModulePermissionIds : "An error occurred";
-            setToastSeverity("error");
-            setToastMessage(errorMessage);
-            setOpenToast(true);
-          }
-        })
-        .catch((errorMessage) => {
-          setSubmitting(false);
-          setToastMessage(errorMessage);
-          setOpenToast(true);
-          handleMessageDialogClose();
-        });
-    }
+    try {
+      const res = await dispatch(action).unwrap();
+      setToastSeverity(res.success ? 'success' : 'error');
+      setToastMessage(res.success ? 'Branch successfully processed' : res.data?.ModulePermissionIds || 'An error occurred');
+      setOpenToast(true);
 
-    if (isNewBranch === false) {
-      const finalData = {
-        id: branchId,
-        data: {
-          description: values.description,
-          name: values.name,
-          code: values.code
-        }
-      };
-
-      dispatch(editBranch(finalData))
-        .unwrap()
-        .then((res) => {
-          if (res.success) {
-            setToastSeverity("success");
-            setToastMessage("Branch edited Successfully");
-            setOpenToast(true);
-            setSubmitting(false);
-            setTimeout(() => {
-              onClose();
-            }, 1000);
-          } else {
-            const errorMessage = res.data && res.data.ModulePermissionIds ? res.data.ModulePermissionIds : "An error occurred";
-            setToastSeverity("error");
-            setToastMessage(errorMessage);
-            setOpenToast(true);
-          }
-        })
-        .catch((errorMessage) => {
-          setSubmitting(false);
-          setToastMessage(errorMessage);
-          setOpenToast(true);
-        });
+      if (res.success) {
+        setTimeout(onClose, 1000);
+      }
+    } catch (error) {
+      setSubmitting(false);
+      setToastMessage(error);
+      setOpenToast(true);
     }
   };
 
-  const validationSchema = Yup.object().shape({
+  const validationSchema = Yup.object({
     name: Yup.string()
-      .required("Required")
-      .matches(regexPattern, "Name must not contain numeric values, symbols, empty strings, space values, or leading spaces"),
-    description: Yup.string().required("Required"),
-    code: Yup.string().required("Required").matches(numberRegexValidation, "Code must be type number and less than 6 digits")
+      .required('Required')
+      .matches(/^(?!\d)[^\W\d]+\S*$/, 'Name must not contain numbers, symbols, or leading spaces'),
+    description: Yup.string().required('Required'),
+    code: Yup.string()
+      .required('Required')
+      .matches(/^-?\d{1,6}(\.\d{1,5})?$/, 'Code must be a number with up to 6 digits')
   });
 
   return (
     <Formik
-      initialValues={
-        isNewBranch === false
-          ? {
-              description: branchFormData?.description,
-              name: branchFormData?.name,
-              code: branchFormData?.code || ""
-            }
-          : {
-              description: "",
-              name: "",
-              code: ""
-            }
-      }
+      initialValues={{
+        description: branchFormData?.description || '',
+        name: branchFormData?.name || '',
+        code: branchFormData?.code || ''
+      }}
       enableReinitialize
       validationSchema={validationSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        handleSubmit(values, { setSubmitting });
-      }}
+      onSubmit={handleSubmit}
     >
       {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
         <Form>
-          <Grid container spacing={3} sx={{ margin: "20px" }}>
-            <Grid item xs={10}>
-              <TextField
-                name="name"
-                label="Name"
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.name && Boolean(errors.name)}
-                helperText={touched.name && errors.name}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={10}>
-              <TextField
-                name="description"
-                label="Description"
-                value={values.description}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.description && Boolean(errors.description)}
-                helperText={touched.description && errors.description}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={10}>
-              <TextField
-                name="code"
-                label="Code"
-                value={values.code}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.code && Boolean(errors.code)}
-                helperText={touched.code && errors.code}
-                fullWidth
-              />
-            </Grid>
+          <Grid container spacing={3} sx={{ margin: '20px' }}>
+            {['name', 'description', 'code'].map((field) => (
+              <Grid item xs={10} key={field}>
+                <TextField
+                  name={field}
+                  label={field.charAt(0).toUpperCase() + field.slice(1)}
+                  value={values[field]}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched[field] && Boolean(errors[field])}
+                  helperText={touched[field] && errors[field]}
+                  fullWidth
+                />
+              </Grid>
+            ))}
             <Grid item xs={10}>
               <Button type="primary" loading={isSubmitting} htmlType="submit" block>
                 Submit
@@ -190,10 +101,9 @@ const BranchForm = ({ onClose, isNewBranch, branchId }) => {
 };
 
 BranchForm.propTypes = {
-  onClose: PropTypes.func,
-  isNewBranch: PropTypes.bool,
-  branchId: PropTypes.string,
-  handleCloseForm: PropTypes.func
+  onClose: PropTypes.func.isRequired,
+  isNewBranch: PropTypes.bool.isRequired,
+  branchId: PropTypes.string
 };
 
 export default BranchForm;
