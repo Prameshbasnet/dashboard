@@ -6,17 +6,19 @@ import { Stack, Typography } from '@mui/material';
 import Highlighter from 'react-highlight-words';
 import ReusableModal from 'components/modal/ReusableModal';
 import Toast from 'components/Toast';
-import FoodForm from './foodForm';
-import { deleteFood, fetchFoods, selectAllFoods } from 'store/slice/food';
+import StockForm from './stocksForm';
+import { deleteStock, fetchStocks, selectAllStocks } from 'store/slice/stocks';
+import { fetchFoods, selectAllFoods } from 'store/slice/food';
 
-const DisplayFood = () => {
+const DisplayStocks = () => {
   const dispatch = useDispatch();
+  const stocks = useSelector(selectAllStocks);
   const foods = useSelector(selectAllFoods);
 
   const [state, setState] = useState({
     showForm: false,
-    foodId: null,
-    isNewFood: true,
+    stockId: null,
+    isNewStock: true,
     search: {
       text: '',
       column: ''
@@ -36,19 +38,28 @@ const DisplayFood = () => {
     pageSizeOptions: ['5', '10', '20', '50']
   };
 
+  const enrichedStocks = stocks.map((stock) => {
+    const food = foods.find((f) => f.id === stock.foodId);
+    return {
+      ...stock,
+      foodName: food?.name || 'Unknown',
+      availability: stock.isAvailable ? 'Available' : 'Out Of Stock'
+    };
+  });
+
   useEffect(() => {
-    const loadFoods = async () => {
+    const loadData = async () => {
       setState((prev) => ({ ...prev, loading: true }));
       try {
-        await dispatch(fetchFoods()).unwrap();
+        await Promise.all([dispatch(fetchStocks()), dispatch(fetchFoods())]);
       } catch (error) {
-        showToast('Failed to load food items', 'error');
+        showToast('Failed to load stock data', 'error');
       } finally {
         setState((prev) => ({ ...prev, loading: false }));
       }
     };
 
-    loadFoods();
+    loadData();
   }, [dispatch]);
 
   const showToast = (message, severity = 'success') => {
@@ -62,17 +73,18 @@ const DisplayFood = () => {
     setState((prev) => ({
       ...prev,
       showForm: !prev.showForm,
-      isNewFood: isNew,
-      foodId: id
+      isNewStock: isNew,
+      stockId: id
     }));
   };
 
   const handleDelete = async (id) => {
     try {
-      await dispatch(deleteFood(id)).unwrap();
-      showToast('Food item deleted successfully');
+      await dispatch(deleteStock(id)).unwrap();
+      showToast('Stock record deleted successfully');
+      dispatch(fetchStocks());
     } catch (error) {
-      showToast('Failed to delete food item', 'error');
+      showToast('Failed to delete stock record', 'error');
     }
   };
 
@@ -136,34 +148,39 @@ const DisplayFood = () => {
 
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a, b) => a.name.localeCompare(b.name),
-      sortOrder: state.sorting.columnKey === 'name' && state.sorting.order,
-      ...getColumnSearchProps('name')
+      title: 'Food Item',
+      dataIndex: 'foodName',
+      key: 'foodName',
+      sorter: (a, b) => a.foodName.localeCompare(b.foodName),
+      sortOrder: state.sorting.columnKey === 'foodName' && state.sorting.order,
+      ...getColumnSearchProps('foodName')
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-      ...getColumnSearchProps('description')
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      key: 'quantity',
+      sorter: (a, b) => a.quantity - b.quantity,
+      render: (value) => Number(value).toLocaleString()
     },
     {
-      title: 'Code',
-      dataIndex: 'code',
-      key: 'code',
-      sorter: (a, b) => a.code.localeCompare(b.code),
-      sortOrder: state.sorting.columnKey === 'code' && state.sorting.order,
-      ...getColumnSearchProps('code')
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
-      render: (value) => `$${parseFloat(value).toFixed(2)}`,
-      sorter: (a, b) => a.price - b.price,
-      sortOrder: state.sorting.columnKey === 'price' && state.sorting.order
+      title: 'Status',
+      dataIndex: 'availability',
+      key: 'availability',
+      render: (text) => (
+        <span
+          style={{
+            color: text === 'Available' ? '#52c41a' : '#ff4d4f',
+            fontWeight: 500
+          }}
+        >
+          {text}
+        </span>
+      ),
+      filters: [
+        { text: 'Available', value: 'Available' },
+        { text: 'Out Of Stock', value: 'Out Of Stock' }
+      ],
+      onFilter: (value, record) => record.availability === value
     },
     {
       title: 'Actions',
@@ -172,7 +189,7 @@ const DisplayFood = () => {
         <Space size="middle">
           <Button aria-label="Edit" onClick={() => handleModalToggle(false, record.id)} icon={<EditOutlined />} />
           <Popconfirm
-            title="Are you sure you want to delete this item?"
+            title="Are you sure you want to delete this stock record?"
             onConfirm={() => handleDelete(record.id)}
             okText="Yes"
             cancelText="No"
@@ -184,7 +201,7 @@ const DisplayFood = () => {
     }
   ];
 
-  const filteredData = foods.filter((item) =>
+  const filteredData = enrichedStocks.filter((item) =>
     Object.keys(item).some((key) => item[key]?.toString().toLowerCase().includes(state.search.text.toLowerCase()))
   );
 
@@ -192,15 +209,15 @@ const DisplayFood = () => {
     <div style={{ padding: '2rem' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={4}>
         <Typography variant="h4" component="h1">
-          Food Management
+          Stock Management
         </Typography>
         <Button type="primary" onClick={() => handleModalToggle()} icon={<PlusCircleFilled />} size="large">
-          Add New Food
+          Add Stock Entry
         </Button>
       </Stack>
 
-      <ReusableModal open={state.showForm} onClose={() => handleModalToggle()} title={`${state.isNewFood ? 'Add' : 'Edit'} Food Item`}>
-        <FoodForm onClose={() => handleModalToggle()} foodId={state.foodId} isNewFood={state.isNewFood} />
+      <ReusableModal open={state.showForm} onClose={() => handleModalToggle()} title={`${state.isNewStock ? 'Add' : 'Edit'} Stock Entry`}>
+        <StockForm onClose={() => handleModalToggle()} stockId={state.stockId} isNewStock={state.isNewStock} />
       </ReusableModal>
 
       <Table
@@ -211,6 +228,7 @@ const DisplayFood = () => {
         loading={state.loading}
         rowKey="id"
         bordered
+        scroll={{ x: true }}
       />
 
       <Toast
@@ -228,6 +246,4 @@ const DisplayFood = () => {
   );
 };
 
-DisplayFood.propTypes = {};
-
-export default DisplayFood;
+export default DisplayStocks;

@@ -4,9 +4,9 @@ import { getAxiosInstance } from 'store/axios/AxiosInstance';
 
 const AxiosInstance = getAxiosInstance('apiUrl');
 
-export const fetchFoods = createAsyncThunk('foods/fetch', async (__, thunkAPI) => {
+export const fetchTables = createAsyncThunk('tables/fetch', async (__, thunkAPI) => {
   try {
-    const response = await AxiosInstance.get(`/foods`);
+    const response = await AxiosInstance.get(`/tables`);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -15,9 +15,9 @@ export const fetchFoods = createAsyncThunk('foods/fetch', async (__, thunkAPI) =
   }
 });
 
-export const addFood = createAsyncThunk('foods/add', async (data, thunkAPI) => {
+export const addTable = createAsyncThunk('tables/add', async (data, thunkAPI) => {
   try {
-    const response = await AxiosInstance.post(`/foods`, data);
+    const response = await AxiosInstance.post(`/tables`, data);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -26,9 +26,9 @@ export const addFood = createAsyncThunk('foods/add', async (data, thunkAPI) => {
   }
 });
 
-export const editFood = createAsyncThunk('foods/edit', async (data, thunkAPI) => {
+export const editTable = createAsyncThunk('tables/edit', async (data, thunkAPI) => {
   try {
-    const response = await AxiosInstance.put(`/foods/${data.id}`, data.data);
+    const response = await AxiosInstance.put(`/tables/${data.id}`, data.data);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -37,9 +37,9 @@ export const editFood = createAsyncThunk('foods/edit', async (data, thunkAPI) =>
   }
 });
 
-export const deleteFood = createAsyncThunk('foods/delete', async (id, thunkAPI) => {
+export const deleteTable = createAsyncThunk('tables/delete', async (id, thunkAPI) => {
   try {
-    const response = await AxiosInstance.delete(`/foods/${id}`);
+    const response = await AxiosInstance.delete(`/tables/${id}`);
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data.data) || error.message || error.toString();
@@ -47,17 +47,22 @@ export const deleteFood = createAsyncThunk('foods/delete', async (id, thunkAPI) 
     return thunkAPI.rejectWithValue(message);
   }
 });
-const foodSlice = createSlice({
-  name: 'food',
+
+const tablesSlice = createSlice({
+  name: 'tables',
   initialState: [],
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(fetchFoods.fulfilled, (state, action) => {
-      return action.payload.data;
-    });
+    builder
+      .addCase(fetchTables.fulfilled, (state, action) => {
+        return action.payload.data;
+      })
+      .addCase(addTable.fulfilled, (state, action) => {
+        state.push(action.payload.data);
+      });
   }
 });
 
-export const selectAllFoods = (state) => state.food;
-const { reducer } = foodSlice;
+export const selectAllTables = (state) => state.table;
+const { reducer } = tablesSlice;
 export default reducer;

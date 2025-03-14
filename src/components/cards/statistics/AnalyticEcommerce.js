@@ -1,66 +1,97 @@
-import PropTypes from 'prop-types';
-
-// material-ui
-import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-
-// project import
+import { Chip, Grid, Stack, Typography, Box, useTheme, alpha } from '@mui/material';
 import MainCard from 'components/MainCard';
+import { RiseOutlined, FallOutlined } from '@ant-design/icons';
 
-// assets
-import RiseOutlined from '@ant-design/icons/RiseOutlined';
-import FallOutlined from '@ant-design/icons/FallOutlined';
+const AnalyticEcommerce = ({ color = 'primary', title, count, percentage, isLoss }) => {
+  const theme = useTheme();
 
-const iconSX = { fontSize: '0.75rem', color: 'inherit', marginLeft: 0, marginRight: 0 };
-
-export default function AnalyticEcommerce({ color = 'primary', title, count, percentage, isLoss, extra }) {
   return (
-    <MainCard contentSX={{ p: 2.25 ,height: 150}}>
+    <MainCard
+      contentSX={{
+        p: 2.5,
+        height: 160,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        transition: 'all 0.3s ease',
+        background: `linear-gradient(135deg, ${alpha(theme.palette[color].main, 0.1)} 0%, ${alpha(theme.palette[color].main, 0)} 100%)`,
+        '&:hover': {
+          transform: 'translateY(-5px)',
+          boxShadow: theme.shadows[6]
+        }
+      }}
+    >
       <Stack spacing={0.5}>
-        <Typography variant="h6" color="text.secondary" sx={{fontSize:12}}>
+        <Typography
+          variant="subtitle2"
+          color="textSecondary"
+          sx={{
+            fontSize: 12,
+            fontWeight: 600,
+            letterSpacing: 0.5,
+            color: theme.palette[color].main
+          }}
+        >
           {title}
         </Typography>
-        <Grid container alignItems="center">
+
+        <Grid container alignItems="center" spacing={1}>
           <Grid item>
-            <Typography variant="h4" color="inherit">
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 700,
+                lineHeight: 1.2,
+                color: theme.palette.text.primary
+              }}
+            >
               {count}
             </Typography>
           </Grid>
-          {percentage && (
+
+          {percentage !== undefined && (
             <Grid item>
               <Chip
-                variant="combined"
+                variant="filled"
                 color={color}
-                icon={isLoss ? <FallOutlined style={iconSX} /> : <RiseOutlined style={iconSX} />}
+                icon={isLoss ? <FallOutlined style={{ fontSize: '0.75rem' }} /> : <RiseOutlined style={{ fontSize: '0.75rem' }} />}
                 label={`${percentage}%`}
-                sx={{ ml: 1.25, pl: 1 }}
                 size="small"
+                sx={{
+                  height: 24,
+                  borderRadius: 1,
+                  bgcolor: alpha(theme.palette[color].main, 0.1),
+                  color: theme.palette[color].main,
+                  '& .MuiChip-icon': {
+                    marginRight: 0.5,
+                    marginLeft: 0
+                  }
+                }}
               />
             </Grid>
           )}
         </Grid>
       </Stack>
-      <Box sx={{ pt: 2.25 }}>
-        <Typography variant="caption" color="text.secondary">
-          You made an extra{' '}
-          <Typography variant="caption" sx={{ color: `${color || 'primary'}.main` }}>
-            {extra}
-          </Typography>{' '}
-          1 today
-        </Typography>
+
+      <Box
+        sx={{
+          height: 4,
+          width: '100%',
+          bgcolor: alpha(theme.palette[color].main, 0.1),
+          borderRadius: 2,
+          overflow: 'hidden'
+        }}
+      >
+        <Box
+          sx={{
+            width: `${percentage}%`,
+            height: '100%',
+            bgcolor: theme.palette[color].main,
+            transition: 'width 0.5s ease'
+          }}
+        />
       </Box>
     </MainCard>
   );
-}
-
-AnalyticEcommerce.propTypes = {
-  color: PropTypes.string,
-  title: PropTypes.string,
-  count: PropTypes.string,
-  percentage: PropTypes.number,
-  isLoss: PropTypes.bool,
-  extra: PropTypes.string
 };
+export default AnalyticEcommerce;

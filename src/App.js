@@ -10,7 +10,10 @@ import ResetPasswordComp from 'security/forgetPassword/ResetPasswordComp';
 import ChangeTemporaryPasswordComp from 'security/changePassword/ChangeTemporaryPasswordComp';
 import AuthRegister from 'security/signUp/SignUp';
 import Review from 'security/review/DisplayReview';
-import DisplayFood from 'security/food/foodForm';
+import DisplayCategories from 'security/categories/displayCategories';
+import DisplayTables from 'security/tables/displayTables';
+import DisplayStocks from 'security/stocks/displayStocks';
+import DisplayFood from 'security/food/displayFood';
 
 const DashboardDefault = Loadable(lazy(() => import('dashboard')));
 const AuthLogin = Loadable(lazy(() => import('security/login/login')));
@@ -23,6 +26,9 @@ const AppRoutes = () => {
         <Route path="/generate-qr-code" element={<GenerateQrCode />} />
         <Route path="/review" element={<Review />} />
         <Route path="/food" element={<DisplayFood />} />
+        <Route path="/category" element={<DisplayCategories />} />
+        <Route path="/table" element={<DisplayTables />} />
+        <Route path="/stock" element={<DisplayStocks />} />
       </Route>
       <Route path="/login" element={<AuthLogin />} />
       <Route path="/reset-password" element={<ChangePasswordComp />} />

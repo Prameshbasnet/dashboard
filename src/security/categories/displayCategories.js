@@ -6,17 +6,17 @@ import { Stack, Typography } from '@mui/material';
 import Highlighter from 'react-highlight-words';
 import ReusableModal from 'components/modal/ReusableModal';
 import Toast from 'components/Toast';
-import FoodForm from './foodForm';
-import { deleteFood, fetchFoods, selectAllFoods } from 'store/slice/food';
+import CategoryForm from './categoriesForm';
+import { deleteCategory, fetchCategories, selectAllCategories } from 'store/slice/categories';
 
-const DisplayFood = () => {
+const DisplayCategories = () => {
   const dispatch = useDispatch();
-  const foods = useSelector(selectAllFoods);
+  const categories = useSelector(selectAllCategories);
 
   const [state, setState] = useState({
     showForm: false,
-    foodId: null,
-    isNewFood: true,
+    categoryId: null,
+    isNewCategory: true,
     search: {
       text: '',
       column: ''
@@ -37,18 +37,18 @@ const DisplayFood = () => {
   };
 
   useEffect(() => {
-    const loadFoods = async () => {
+    const loadCategories = async () => {
       setState((prev) => ({ ...prev, loading: true }));
       try {
-        await dispatch(fetchFoods()).unwrap();
+        await dispatch(fetchCategories()).unwrap();
       } catch (error) {
-        showToast('Failed to load food items', 'error');
+        showToast('Failed to load categories', 'error');
       } finally {
         setState((prev) => ({ ...prev, loading: false }));
       }
     };
 
-    loadFoods();
+    loadCategories();
   }, [dispatch]);
 
   const showToast = (message, severity = 'success') => {
@@ -62,17 +62,17 @@ const DisplayFood = () => {
     setState((prev) => ({
       ...prev,
       showForm: !prev.showForm,
-      isNewFood: isNew,
-      foodId: id
+      isNewCategory: isNew,
+      categoryId: id
     }));
   };
 
   const handleDelete = async (id) => {
     try {
-      await dispatch(deleteFood(id)).unwrap();
-      showToast('Food item deleted successfully');
+      await dispatch(deleteCategory(id)).unwrap();
+      showToast('Category deleted successfully');
     } catch (error) {
-      showToast('Failed to delete food item', 'error');
+      showToast('Failed to delete category', 'error');
     }
   };
 
@@ -136,34 +136,18 @@ const DisplayFood = () => {
 
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a, b) => a.name.localeCompare(b.name),
-      sortOrder: state.sorting.columnKey === 'name' && state.sorting.order,
-      ...getColumnSearchProps('name')
+      title: 'Category Name',
+      dataIndex: 'categoryName',
+      key: 'categoryName',
+      sorter: (a, b) => a.categoryName.localeCompare(b.categoryName),
+      sortOrder: state.sorting.columnKey === 'categoryName' && state.sorting.order,
+      ...getColumnSearchProps('categoryName')
     },
     {
       title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-      ...getColumnSearchProps('description')
-    },
-    {
-      title: 'Code',
-      dataIndex: 'code',
-      key: 'code',
-      sorter: (a, b) => a.code.localeCompare(b.code),
-      sortOrder: state.sorting.columnKey === 'code' && state.sorting.order,
-      ...getColumnSearchProps('code')
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
-      render: (value) => `$${parseFloat(value).toFixed(2)}`,
-      sorter: (a, b) => a.price - b.price,
-      sortOrder: state.sorting.columnKey === 'price' && state.sorting.order
+      dataIndex: 'categoryDescription',
+      key: 'categoryDescription',
+      ...getColumnSearchProps('categoryDescription')
     },
     {
       title: 'Actions',
@@ -172,7 +156,7 @@ const DisplayFood = () => {
         <Space size="middle">
           <Button aria-label="Edit" onClick={() => handleModalToggle(false, record.id)} icon={<EditOutlined />} />
           <Popconfirm
-            title="Are you sure you want to delete this item?"
+            title="Are you sure you want to delete this category?"
             onConfirm={() => handleDelete(record.id)}
             okText="Yes"
             cancelText="No"
@@ -184,7 +168,7 @@ const DisplayFood = () => {
     }
   ];
 
-  const filteredData = foods.filter((item) =>
+  const filteredData = categories.filter((item) =>
     Object.keys(item).some((key) => item[key]?.toString().toLowerCase().includes(state.search.text.toLowerCase()))
   );
 
@@ -192,15 +176,15 @@ const DisplayFood = () => {
     <div style={{ padding: '2rem' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={4}>
         <Typography variant="h4" component="h1">
-          Food Management
+          Category Management
         </Typography>
         <Button type="primary" onClick={() => handleModalToggle()} icon={<PlusCircleFilled />} size="large">
-          Add New Food
+          Add New Category
         </Button>
       </Stack>
 
-      <ReusableModal open={state.showForm} onClose={() => handleModalToggle()} title={`${state.isNewFood ? 'Add' : 'Edit'} Food Item`}>
-        <FoodForm onClose={() => handleModalToggle()} foodId={state.foodId} isNewFood={state.isNewFood} />
+      <ReusableModal open={state.showForm} onClose={() => handleModalToggle()} title={`${state.isNewCategory ? 'Add' : 'Edit'} Category`}>
+        <CategoryForm onClose={() => handleModalToggle()} categoryId={state.categoryId} isNewCategory={state.isNewCategory} />
       </ReusableModal>
 
       <Table
@@ -228,6 +212,6 @@ const DisplayFood = () => {
   );
 };
 
-DisplayFood.propTypes = {};
+DisplayCategories.propTypes = {};
 
-export default DisplayFood;
+export default DisplayCategories;

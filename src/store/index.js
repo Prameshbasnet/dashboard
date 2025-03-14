@@ -7,6 +7,9 @@ import dashboardReducer from './slice/dashboard';
 import restPasswordReducer from './slice/resetPassword';
 import reviewReducer from './slice/review';
 import foodReducer from './slice/food';
+import categoryReducer from './slice/categories';
+import tableReducer from './slice/tables';
+import stockReducer from './slice/stocks';
 
 const reducer = {
   auth: authReducer,
@@ -16,7 +19,10 @@ const reducer = {
   dashboard: dashboardReducer,
   resetPassword: restPasswordReducer,
   review: reviewReducer,
-  food: foodReducer
+  food: foodReducer,
+  category: categoryReducer,
+  table: tableReducer,
+  stock: stockReducer
 };
 
 const store = configureStore({
